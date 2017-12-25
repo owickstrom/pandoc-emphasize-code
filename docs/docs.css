@@ -1,0 +1,189 @@
+html, body {
+  height: 100%;
+}
+body {
+
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 10px;
+
+  line-height: 1.5;
+  font-size: 16px;
+  font-family: 'Fira Sans', 'Ubuntu', sans-serif;
+
+  color: #111;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-feature-settings: "kern" 1;
+  -moz-font-feature-settings: "kern" 1;
+  -o-font-feature-settings: "kern" 1;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+p, pre, table, ul, ol {
+  margin: 1em 0;
+}
+
+ul, ol {
+  padding: 0 0 0 1.5em;
+}
+
+ul ol,
+ul ul,
+ol ul,
+ol ol {
+  margin: 0 0 0;
+  padding: 0 0 0 1em;
+}
+
+ul li,
+ol li {
+  padding-left: .5em;
+  margin-bottom: .5em;
+}
+
+li > a + ul,
+li > a + ol {
+  margin-top: .5em;
+}
+
+pre,
+code {
+  font-family: 'Fira Mono', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: inherit;
+  color: #111;
+}
+
+pre {
+  position: relative;
+  overflow: auto;
+  padding: 1em;
+  margin: 1.5em 0;
+  background-color: #eee;
+  box-shadow: 1px 1px 1px #aaa;
+}
+
+p code {
+  background: #eee;
+  padding: 0 2px;
+  line-height: 1.3;
+}
+
+code em {
+  font-style: italic;
+}
+
+pre:before {
+  display: block;
+  content: attr(caption);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+pre:before,
+table caption {
+  font-style: italic;
+  font-size: 16px;
+  text-align: center;
+}
+table {
+  border-spacing: 0;
+  border-collapse: separate;
+}
+table caption {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+table th,
+table td {
+  padding: 4px;
+}
+table th {
+  padding: 6px 4px 4px;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+  font-weight: 400;
+}
+
+body > table {
+  position: relative;
+  width: 100%;
+  padding: 2em;
+}
+
+$brand-color:      #e81c4f;
+$text-color:       #222222;
+a {
+  color: #e81c4f;
+}
+a:visited {
+  color: #888888;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  text-align: justify;
+}
+
+header {
+  text-align: center;
+}
+
+figure {
+  text-align: center;
+}
+
+img {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 800;
+  margin: 1.5em 0 .5em 0;
+}
+
+h1 {
+  font-family: 'Oswald', 'Ubuntu Condensed', 'Impact', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 600;
+}
+
+h2 {
+  padding-bottom: .25em;
+  border-bottom: 1px solid #ddd;
+}
+
+p.subtitle {
+  font-family: 'Oswald', 'Ubuntu Condensed', 'Impact', sans-serif;
+  font-size: 125%;
+  text-align: center;
+  color: #666;
+}
+
+#TOC {
+  margin: 2em 0;
+}
+
+footer {
+  padding: 1em;
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+}

@@ -1,0 +1,37 @@
+div.sourceCode {
+  overflow-x: visible;
+}
+code span.kw { color: #222; } /* Keyword */
+code span.dt { color: #0074de; } /* DataType */
+code span.dv { color: #006699; } /* DecVal */
+code span.bn { color: #006699; } /* BaseN */
+code span.fl { color: #006699; } /* Float */
+code span.cn { color: #e81c4f; } /* Constant */
+code span.ch { color: #924c9d; } /* Char */
+code span.sc { color: #3daee9; } /* SpecialChar */
+code span.st { color: #e81c4f; } /* String */
+code span.vs { color: #e81c4f; } /* VerbatimString */
+code span.ss { color: #ff5500; } /* SpecialString */
+code span.im { color: #ff5500; } /* Import */
+code span.co { color: #898887; } /* Comment */
+code span.do { color: #607880; } /* Documentation */
+code span.an { color: #ca60ca; } /* Annotation */
+code span.cv { color: #0095ff; } /* CommentVar */
+code span.ot { color: #5200ff; } /* Other */
+code span.fu { color: #5200ff; } /* Function */
+code span.va { color: #0074de; } /* Variable */
+code span.cf { color: #5200ff; font-weight: bold; } /* ControlFlow */
+code span.op { color: #5200ff; } /* Operator */
+code span.bu { color: #5200ff; font-weight: bold; } /* BuiltIn */
+code span.ex { font-weight: bold; } /* Extension */
+code span.pp { color: #006e28; } /* Preprocessor */
+code span.at { color: #0074de; } /* Attribute */
+code span.re { color: #0074de; } /* RegionMarker */
+code span.in { color: #006699; } /* Information */
+code span.wa { color: #e81c4f; } /* Warning */
+code span.al { color: #e81c4f; font-weight: bold; } /* Alert */
+code span.er { color: #e81c4f; } /* Error */
+code span { color: #222; } /* Normal */
+
+.bash span.bu { color: inherit; font-style: font-weight: bold; } /* BuiltIn */
+.bash span.fu { color: inherit; font-weight: bold; } /* Function */

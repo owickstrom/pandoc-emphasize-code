@@ -1,12 +1,30 @@
+<!-- THIS FILE IS GENERATED FROM 'README.src.md'. DO NOT EDIT BY HAND! -->
 # pandoc-emphasize-code
 
-_A Pandoc filter for emphasizing code in fenced blocks._
+*A Pandoc filter for emphasizing code in fenced blocks.*
 
-## Usage
 
-The filter recognizes code blocks with the `emphasize` attribute present.
 
-    ```{emphasize=2:3-3:13}
+
+
+
+
+-   [Usage](#usage)
+    -   [Rendering with LaTeX](#rendering-with-latex)
+    -   [Regular Highlighting](#regular-highlighting)
+-   [Install](#install)
+    -   [From Hackage](#from-hackage)
+-   [Build](#build)
+-   [Run](#run)
+-   [Changelog](#changelog)
+-   [License](#license)
+
+Usage
+-----
+
+The filter recognizes code blocks with the `emphasize` attribute present:
+
+    ```{.haskell emphasize=2:3-2:14,3:3-3:12}
     myFunc = do
       newStuffHere
       andThisToo notThis
@@ -15,65 +33,128 @@ The filter recognizes code blocks with the `emphasize` attribute present.
 
 Giving HTML output:
 
-    <pre><code>myFunc = do
-      <em>newStuffHere
-      andThisToo</em> notThis
-      notSoRelevant
-    </code></pre>
+``` html
+<pre class="haskell"><code>myFunc = do
+  <em>newStuffHere</em>
+  <em>andThisToo</em> notThis
+  notSoRelevant</code></pre>
+```
 
-Which can be styled with bold font or colors.
+When rendering to HTML, the markup can be styled using CSS:
 
-<pre><code>myFunc = do
-  <b>newStuffHere
-  andThisToo</b> notThis
+``` css
+code em {
+  color: red;
+  font-style: italic;
+}
+```
+
+By default, if no custom styling is applied, it will look something like this:
+
+<pre class="haskell"><code>myFunc = do
+  <em>newStuffHere</em>
+  <em>andThisToo</em> notThis
+  notSoRelevant</code></pre>
+Note that the there is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.
+
+### Rendering with LaTeX
+
+When rendering using LaTeX, two things are required:
+
+-   The `listings` package needs to be included.
+-   You need to define a `CodeEmphasis` command, styling the emphasized code in `lstlisting`s.
+
+If you're not using a custom LaTeX template, you can use the YAML front matter in a Markdown source file to add the requirements:
+
+``` yaml
+header-includes:
+  - \usepackage{listings}
+  - \lstset{basicstyle=\ttfamily}
+  - \newcommand{\CodeEmphasis}[1]{\textcolor{red}{\textit{#1}}}
+```
+
+**NOTE:** When rendering as Beamer slides, any frame including an emphasized block must be marked as `fragile`:
+
+```` markdown
+## My Slide {.fragile}
+
+```{.haskell emphasize=2:3-2:14,3:3-3:12}
+myFunc = do
+  newStuffHere
+  andThisToo notThis
   notSoRelevant
-</code></pre>
+```
+````
 
-## Install
+### Regular Highlighting
 
-Executables for Linux and macOS are available in the [Releases
-page](https://github.com/owickstrom/pandoc-emphasize-code/releases).
+You can still use regular Pandoc highlighting (the *skylighting* library):
+
+    ``` {.css}
+    .hello {
+      world: yes;
+    }
+    ```
+
+It gives you all the nice colors:
+
+``` css
+.hello {
+  world: yes;
+}
+```
+
+The drawback is that you have two different highlighting systems now, one for emphasized code, one for regular code blocks.
+
+Install
+-------
+
+Executables for Linux and macOS are available in the [Releases page](https://github.com/owickstrom/pandoc-emphasize-code/releases).
 
 ### From Hackage
 
-If you'd rather install using `cabal` or `stack`, you can use the following
-command:
+If you'd rather install using `cabal` or `stack`, you can use the following command:
 
-```bash
+``` sh
 cabal install pandoc-emphasize-code
 ```
 
 The package is [available at Hackage](https://hackage.haskell.org/package/pandoc-emphasize-code).
 
-## Build
+Build
+-----
 
 Requirements:
 
-* [Cabal](https://www.haskell.org/cabal/) or
-  [Stack](https://docs.haskellstack.org/en/stable/README/), either works.
+-   [Cabal](https://www.haskell.org/cabal/) or [Stack](https://docs.haskellstack.org/en/stable/README/), either works.
 
 To install from sources, run:
 
-```bash
+``` sh
 git clone git@github.com:owickstrom/pandoc-emphasize-code.git
 cd pandoc-emphasize-code
-cabal configure
-cabal install
+stack setup
+stack install
 ```
 
-## Run
+Run
+---
 
-If you have installed from sources, and you have `~/.local/bin` on your
-`PATH`, you can use the filter with Pandoc like so:
+If you have installed from sources, and you have `~/.local/bin` on your `PATH`, you can use the filter with Pandoc like so:
 
-```bash
+``` sh
 pandoc --filter pandoc-emphasize-code input.md output.html
 ```
 
-## Changelog
+Changelog
+---------
 
-[CHANGELOG.md](CHANGELOG.md)
+-   **0.1.0**
+    -   First release
+    -   Support for multiple ranges
+    -   Rendering support for HTML, Markdown, and LaTeX
 
-## License
+License
+-------
 
 [Mozilla Public License Version 2.0](LICENSE)

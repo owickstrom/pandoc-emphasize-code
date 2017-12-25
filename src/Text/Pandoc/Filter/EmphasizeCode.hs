@@ -19,13 +19,15 @@ import Control.Monad.Reader
 import Data.Char (isSpace)
 import Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as HM
-import Data.List (isInfixOf)
+import Data.List (foldl', isInfixOf)
 import Data.Text (Text)
 import qualified Data.Text as Text
 import qualified Data.Text.IO as Text
 import Text.Pandoc.JSON
 import Text.Read (readMaybe)
 
+import Text.Pandoc.Filter.Chunking
+import Text.Pandoc.Filter.Position
 import Text.Pandoc.Filter.Range
 
 data MissingRangePart
@@ -36,32 +38,50 @@ data MissingRangePart
 data EmphasisError
   = InvalidRange Position
                  Position
+  | InvalidRanges InvalidRanges
   | InvalidRangeFormat Text
-  | InvalidPosition Int
-                    Int
+  | InvalidPosition Line
+                    Column
   | InvalidPositionFormat Text
+  | InvalidLineNumber Text
+  | InvalidColumnNumber Text
   deriving (Show, Eq)
 
-parseRange :: HashMap String String -> ExceptT EmphasisError Maybe Range
-parseRange attrs = do
+parseMaybe :: Read a => Text -> (Text -> EmphasisError) -> ExceptT EmphasisError Maybe a
+parseMaybe t mkError =
+  case readMaybe (Text.unpack t) of
+    Just x -> pure x
+    Nothing -> throwError (mkError t)
+
+parseRanges :: HashMap String String -> ExceptT EmphasisError Maybe Ranges
+parseRanges attrs = do
   emphasize <- lift (HM.lookup "emphasize" attrs)
-  parseRange (Text.pack emphasize)
+  parseRanges (Text.pack emphasize)
   where
     split2 sep t err =
       case Text.splitOn sep t of
         [before, after] -> return (before, after)
         _ -> throwError (err t)
-    parseInt = lift . readMaybe . Text.unpack
     parsePosition t = do
-      (row, col) <- split2 ":" t InvalidPositionFormat
-      row' <- parseInt row
-      col' <- parseInt col
-      lift (mkPosition row' col')
+      (line, col) <- split2 ":" t InvalidPositionFormat
+      line' <- Line <$> parseMaybe line InvalidLineNumber
+      col' <- Column <$> parseMaybe col InvalidColumnNumber
+      case mkPosition line' col' of
+        Just position -> pure position
+        Nothing -> throwError (InvalidPosition line' col')
     parseRange t = do
       (startStr, endStr) <- split2 "-" t InvalidRangeFormat
       start <- parsePosition startStr
       end <- parsePosition endStr
-      lift (mkRange start end)
+      case mkRange start end of
+        Just range -> pure range
+        Nothing -> throwError (InvalidRange start end)
+    parseRanges t = do
+      let strs = filter (not . Text.null) (map Text.strip (Text.splitOn "," t))
+      rs <- mapM parseRange strs
+      case mkRanges rs of
+        Left err -> throwError (InvalidRanges err)
+        Right ranges -> pure ranges
 
 filterAttributes :: [(String, String)] -> [(String, String)]
 filterAttributes = filter nonFilterAttribute
@@ -69,108 +89,117 @@ filterAttributes = filter nonFilterAttribute
     nonFilterAttribute (key, _) = key `notElem` attributeNames
     attributeNames = ["emphasize"]
 
-printAndFail :: EmphasisError -> IO Block
+printAndFail :: EmphasisError -> IO a
 printAndFail = fail . formatError
   where
     formatError =
       \case
         InvalidRange start end ->
           "Invalid range: " ++ show start ++ " to " ++ show end
+        err -> show err
 
 emphasizeRangeHtml ::
-     (String, [String], [(String, String)]) -> Text -> Range -> Block
-emphasizeRangeHtml (_, classes, _) t range =
-  RawBlock (Format "html") (Text.unpack (encloseInPreCode classes emphasized))
+     (String, [String], [(String, String)]) -> EmphasizedLines -> Block
+emphasizeRangeHtml (_, classes, _) lines =
+  RawBlock (Format "html") (Text.unpack emphasized)
   where
-    start = rangeStart range
-    end = rangeEnd range
-    injectAtColumn col sep line =
-      let (before, after) = Text.splitAt col line
-      in before <> sep <> after
-    addEmphasis line lineNr
-      | lineNr == positionRow start =
-        injectAtColumn (positionColumn start - 1) "<em>" line
-      | lineNr == positionRow end =
-        injectAtColumn (positionColumn end) "</em>" line
-      | otherwise = line
-    emphasized = Text.unlines (zipWith addEmphasis (Text.lines t) [1 ..])
-    encloseInPreCode classes t =
+    emphasizeChunk chunk =
+      case chunk of
+        Literal t -> t
+        Emphasized t -> "<em>" <> t <> "</em>"
+    classAttr =
+      if null classes
+         then ""
+         else " class=\"" <> Text.pack (unwords classes) <> "\""
+    emphasized =
       mconcat
-        [ "<pre class="
-        , Text.pack (unwords classes)
-        , ">"
-        , "<code>"
-        , t
+        [ "<pre"
+        , classAttr
+        , "><code>"
+        , Text.dropEnd 1 (Text.unlines (map (foldMap emphasizeChunk) lines))
         , "</code>"
         , "</pre>"
         ]
 
-data LatexMode
-  = Latex
-  | Beamer
+emphasizeRangeMarkdown ::
+     (String, [String], [(String, String)]) -> EmphasizedLines -> Block
+emphasizeRangeMarkdown (_, classes, _) lines =
+  RawBlock (Format "html") (Text.unpack emphasized)
+  where
+    emphasizeChunk chunk =
+      case chunk of
+        Literal t -> t
+        Emphasized t -> "<em>" <> t <> "</em>"
+    classAttr =
+      if null classes
+         then ""
+         else " class=\"" <> Text.pack (unwords classes) <> "\""
+    emphasized =
+      mconcat
+        [ "<pre"
+        , classAttr
+        , "><code>"
+        , Text.dropEnd 1 (Text.unlines (map (foldMap emphasizeChunk) lines))
+        , "</code>"
+        , "</pre>"
+        ]
 
 emphasizeRangeLatex ::
-     LatexMode
-  -> (String, [String], [(String, String)])
-  -> Text
-  -> Range
+  (String, [String], [(String, String)])
+  -> EmphasizedLines
   -> Block
-emphasizeRangeLatex mode (_, classes, _) t range =
+emphasizeRangeLatex (_, classes, _) lines =
   RawBlock (Format "latex") (Text.unpack (encloseInVerbatim emphasized))
   where
-    start = rangeStart range
-    end = rangeEnd range
+    languageAttr =
+      case classes of
+        [lang] -> ",language=" <> Text.pack lang
     encloseInTextIt t
       | Text.null t = t
-      | otherwise =
-        case mode of
-          Latex -> "@\\textbf{\\textcolor{PandocEmphasizeCodeColor}{" <> t <> "}}@"
-          Beamer -> "\\EmphasisTok{" <> t <> "}"
+      | otherwise = "£\\CodeEmphasis{" <> t <> "}£"
     emphasizeNonSpace t
       | Text.null t = t
       | otherwise =
         let (nonSpace, rest) = Text.break isSpace t
             (spaces, rest') = Text.span isSpace rest
         in mconcat [encloseInTextIt nonSpace, spaces, emphasizeNonSpace rest']
-    addEmphasis line lineNr
-      | lineNr == positionRow start =
-        let (before, after) = Text.splitAt (positionColumn start - 1) line
-        in before <> emphasizeNonSpace after
-      | lineNr == positionRow end =
-        let (before, after) = Text.splitAt (positionColumn end) line
-        in emphasizeNonSpace before <> after
-      | lineIntersectsWithRange lineNr range = emphasizeNonSpace line
-      | otherwise = line
-    emphasized = Text.unlines (zipWith addEmphasis (Text.lines t) [1 ..])
+    emphasizeChunk chunk =
+      case chunk of
+        Literal t -> t
+        Emphasized t -> emphasizeNonSpace t
+    emphasized = Text.unlines (map (foldMap emphasizeChunk) lines)
     encloseInVerbatim t =
-      case mode of
-        Latex ->
-          Text.unlines
-            ["\\begin{lstlisting}[escapechar=@]", t, "\\end{lstlisting}"]
-        Beamer ->
-          Text.unlines
-            [ "\\begin{Shaded}"
-            , "\\begin{Highlighting}[]"
-            , t
-            , "\\end{Highlighting}"
-            , "\\end{Shaded}"
-            ]
+      mconcat
+        [ "\\begin{lstlisting}[escapechar=£"
+        , languageAttr
+        , "]\n"
+        , t
+        , "\\end{lstlisting}\n"
+        ]
 
 type Emphasizer
-   = (String, [String], [(String, String)]) -> Text -> Range -> Block
+   = (String, [String], [(String, String)]) -> EmphasizedLines -> Block
 
 asEmphasizer :: Format -> Maybe Emphasizer
 asEmphasizer f
   | f `elem` ["html", "html5"] = Just emphasizeRangeHtml
-  | f == "latex" = Just (emphasizeRangeLatex Latex)
-  | f == "beamer" = Just (emphasizeRangeLatex Beamer)
+  | f == "markdown_github" = Just emphasizeRangeMarkdown
+  | f == "latex" = Just emphasizeRangeLatex
+  | f == "beamer" = Just emphasizeRangeLatex
   | otherwise = Nothing
 
 -- | A Pandoc filter that emphasizes code sections.
 emphasizeCode :: Maybe Format -> Block -> IO Block
-emphasizeCode (Just (asEmphasizer -> Just emphasizer)) cb@(CodeBlock h@(id', classes, attrs) contents) =
-  case runExceptT (parseRange (HM.fromList attrs)) of
-    Just (Right range) -> return (emphasizer h (Text.pack contents) range)
+emphasizeCode (Just (asEmphasizer -> Just emphasizer)) cb@(CodeBlock (id', classes, attrs) contents) =
+  case runExceptT (parseRanges attrs') of
+    Just (Right ranges) ->
+      let lines = emphasizeRanges (splitRanges ranges) (Text.pack contents)
+      in return
+           (emphasizer
+              (id', classes, HM.toList (HM.delete "emphasize" attrs'))
+              lines)
     Just (Left err) -> printAndFail err
     Nothing -> return cb
+  where
+    attrs' = HM.fromList attrs
 emphasizeCode _ x = return x
