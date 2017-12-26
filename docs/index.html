@@ -143,13 +143,15 @@ myFunc = do
 <h3 id="regular-highlighting">Regular Highlighting</h3>
 <p>You can still use regular Pandoc highlighting (the <em>skylighting</em> library):</p>
 <pre><code>``` {.haskell}
+myFunc :: The Type -&gt; Signature
 myFunc = do
   newStuffHere
   andThisToo notThis
   notSoRelevant
 ```</code></pre>
 <p>It gives you all the nice colors:</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">myFunc <span class="fu">=</span> <span class="kw">do</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">myFunc ::</span> <span class="dt">The</span> <span class="dt">Type</span> <span class="ot">-&gt;</span> <span class="dt">Signature</span>
+myFunc <span class="fu">=</span> <span class="kw">do</span>
   newStuffHere
   andThisToo notThis
   notSoRelevant</code></pre></div>

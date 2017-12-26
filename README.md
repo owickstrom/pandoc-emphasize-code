@@ -131,6 +131,7 @@ myFunc = do
 You can still use regular Pandoc highlighting (the *skylighting* library):
 
     ``` {.haskell}
+    myFunc :: The Type -> Signature
     myFunc = do
       newStuffHere
       andThisToo notThis
@@ -140,6 +141,7 @@ You can still use regular Pandoc highlighting (the *skylighting* library):
 It gives you all the nice colors:
 
 ``` haskell
+myFunc :: The Type -> Signature
 myFunc = do
   newStuffHere
   andThisToo notThis
