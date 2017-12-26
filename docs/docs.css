@@ -39,19 +39,12 @@ ol ol {
 
 ul li,
 ol li {
-  padding-left: .5em;
-  margin-bottom: .5em;
-}
-
-li > a + ul,
-li > a + ol {
-  margin-top: .5em;
+  margin-bottom: .25em;
 }
 
 pre,
 code {
   font-family: 'Fira Mono', 'Ubuntu Mono', monospace;
-  font-size: 14px;
   line-height: inherit;
   color: #111;
 }
@@ -65,10 +58,15 @@ pre {
   box-shadow: 1px 1px 1px #aaa;
 }
 
-p code {
+code {
   background: #eee;
   padding: 0 2px;
   line-height: 1.3;
+}
+pre code {
+  background: none;
+  padding: 0;
+  line-height: inherit;
 }
 
 code em {
@@ -138,6 +136,7 @@ p {
 
 header {
   text-align: center;
+  margin: 4em 0;
 }
 
 figure {
@@ -178,7 +177,7 @@ p.subtitle {
 }
 
 #TOC {
-  margin: 2em 0;
+  margin: 4em 0;
 }
 
 footer {

@@ -19,7 +19,7 @@ docs/pandoc-include-code.pdf: README.src.md Makefile
 		-o $@ \
 		$<
 
-docs/index.html: README.src.md Makefile
+docs/index.html: README.src.md Makefile docs/footer.html
 	mkdir -p docs
 	stack exec pandoc -- \
 		-s \
@@ -28,6 +28,7 @@ docs/index.html: README.src.md Makefile
 		--css 'https://fonts.googleapis.com/css?family=Fira+Sans:400,400i|Fira+Mono:400|Oswald:400,600' \
 		--css docs.css \
 		--css syntax-highlighting.css \
+		--include-after docs/footer.html \
 		--filter pandoc-emphasize-code \
 		-o $@ \
 		$<

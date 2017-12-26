@@ -183,6 +183,12 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 
 ## Changelog
 
+* **0.1.1**
+    - Restructured modules
+    - Separated pretty printer
+    - Better error messages
+    - Improved validation
+    - Documentation styling improvements
 * **0.1.0**
     - First release
     - Support for multiple ranges
