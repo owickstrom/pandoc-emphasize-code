@@ -181,8 +181,27 @@ p.subtitle {
 }
 
 footer {
+  margin-top: 4em;
   padding: 1em;
-  text-align: center;
   color: #888;
-  font-size: 13px;
+  text-align: center;
+}
+footer a {
+  color: #888;
+}
+footer ul {
+  list-style-type: none;
+  margin: 0 auto;
+  padding: 0;
+}
+footer li {
+  display: inline-block;
+}
+footer li:before {
+  content: ' | ';
+  margin: 0 .5em;
+  color: #aaa;
+}
+footer li:first-child:before {
+  content: '';
 }

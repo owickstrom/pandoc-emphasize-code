@@ -1,4 +1,4 @@
-all: README.md docs/pandoc-include-code.pdf docs/index.html
+all: README.md docs/pandoc-emphasize-code.pdf docs/index.html
 
 README.md: README.src.md docs/template.md Makefile
 	stack exec pandoc -- \
@@ -10,7 +10,7 @@ README.md: README.src.md docs/template.md Makefile
 		-o $@ \
 		$<
 
-docs/pandoc-include-code.pdf: README.src.md Makefile
+docs/pandoc-emphasize-code.pdf: README.src.md Makefile
 	mkdir -p docs
 	stack exec pandoc -- \
 		-t latex \
