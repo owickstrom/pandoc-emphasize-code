@@ -1,7 +1,7 @@
 {-# LANGUAGE CPP #-}
 
 -- | Ranges that cannot be constructed with incorrect bounds.
-module Text.Pandoc.Filter.Range
+module Text.Pandoc.Filter.EmphasizeCode.Range
   ( Range
   , rangeStart
   , rangeEnd
@@ -26,12 +26,12 @@ import           Data.Semigroup              ((<>))
 import           Control.Applicative
 import           Data.Monoid
 #endif
-import           Control.Monad               (foldM_, guard, when)
+import           Control.Monad               (foldM_, when)
 import           Data.HashMap.Strict         (HashMap)
 import qualified Data.HashMap.Strict         as HashMap
-import           Data.List                   (groupBy, sortOn)
+import           Data.List                   (sortOn)
 
-import           Text.Pandoc.Filter.Position
+import           Text.Pandoc.Filter.EmphasizeCode.Position
 
 data Range = Range
   { rangeStart :: Position
@@ -79,8 +79,8 @@ mkRanges ranges = do
   foldM_ checkOverlap Nothing sorted
   pure (Ranges sorted)
   where
-    checkOverlap (Just last) this = do
-      when (last `rangeIntersects` this) $ Left (Overlap last this)
+    checkOverlap (Just last') this = do
+      when (last' `rangeIntersects` this) $ Left (Overlap last' this)
       return (Just this)
     checkOverlap Nothing this = return (Just this)
 
@@ -93,12 +93,12 @@ data LineRange = LineRange
 mkLineRange :: Line -> Column -> Maybe Column -> Maybe LineRange
 mkLineRange line' start (Just end)
   | line' > 0 && start < end = Just (LineRange line' start (Just end))
-mkLineRange line start Nothing
-  | line > 0 = Just (LineRange line start Nothing)
+mkLineRange line' start Nothing
+  | line' > 0 = Just (LineRange line' start Nothing)
 mkLineRange _ _ _ = Nothing
 
 rangeToLineRanges :: Range -> [LineRange]
-rangeToLineRanges Range {rangeStart = p1, rangeEnd = p2}
+rangeToLineRanges r@Range {rangeStart = p1, rangeEnd = p2}
   | line p1 == line p2 = [LineRange (line p1) (column p1) (Just (column p2))]
   | line p2 > line p1 =
     let startLine = LineRange (line p1) (column p1) Nothing
@@ -106,6 +106,7 @@ rangeToLineRanges Range {rangeStart = p1, rangeEnd = p2}
         middleLines =
           [LineRange n 1 Nothing | n <- [succ (line p1) .. pred (line p2)]]
     in startLine : middleLines ++ [endLine]
+  | otherwise = error ("'Range' has invalid positions: " ++ show r)
 
 splitRanges :: Ranges -> HashMap Line [LineRange]
 splitRanges ranges =

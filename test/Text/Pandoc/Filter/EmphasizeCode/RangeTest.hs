@@ -1,19 +1,19 @@
-module Text.Pandoc.Filter.RangeTest where
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
-import           Data.HashMap.Strict               (HashMap)
-import qualified Data.HashMap.Strict               as HashMap
-import           Data.Maybe                        (mapMaybe)
-import           Test.Tasty
+module Text.Pandoc.Filter.EmphasizeCode.RangeTest where
+
+import qualified Data.HashMap.Strict                             as HashMap
+import           Data.Maybe                                      (mapMaybe)
 import           Test.Tasty.Hspec
 
-import           Text.Pandoc.Filter.Position
-import           Text.Pandoc.Filter.Range
-import           Text.Pandoc.Filter.Testing.Ranges
+import           Text.Pandoc.Filter.EmphasizeCode.Position
+import           Text.Pandoc.Filter.EmphasizeCode.Range
+import           Text.Pandoc.Filter.EmphasizeCode.Testing.Ranges
 
 makeLineRanges :: [(Line, Column, Maybe Column)] -> [LineRange]
 makeLineRanges = mapMaybe mkLineRange'
   where
-    mkLineRange' (line, start, end) = mkLineRange line start end
+    mkLineRange' (line', start, end) = mkLineRange line' start end
 
 spec_mkRanges =
   it "sorts ranges" $ do
@@ -46,5 +46,4 @@ spec_splitRanges = do
             , (10, makeLineRanges [(10, 1, Just 2)])
             ]
     splitRanges rs `shouldBe` lrs
-
 {-# ANN module ("HLint: ignore Use camelCase" :: String) #-}

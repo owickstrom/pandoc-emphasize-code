@@ -1,9 +1,9 @@
-module Text.Pandoc.Filter.Testing.Ranges where
+module Text.Pandoc.Filter.EmphasizeCode.Testing.Ranges where
 
 import           Data.Maybe                  (mapMaybe)
 
-import           Text.Pandoc.Filter.Position
-import           Text.Pandoc.Filter.Range
+import           Text.Pandoc.Filter.EmphasizeCode.Position
+import           Text.Pandoc.Filter.EmphasizeCode.Range
 
 mkRanges' :: [((Line, Column), (Line, Column))] -> IO Ranges
 mkRanges' rs = either (fail . show) return (mkRanges (mapMaybe makeRange rs))

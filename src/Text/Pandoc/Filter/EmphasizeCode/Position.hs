@@ -1,7 +1,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 -- | A position that cannot be constructed with incorrect bounds.
-module Text.Pandoc.Filter.Position
+module Text.Pandoc.Filter.EmphasizeCode.Position
   ( Line(..)
   , Column(..)
   , Position

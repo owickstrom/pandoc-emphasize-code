@@ -1,16 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
-module Text.Pandoc.Filter.ChunkingTest where
+module Text.Pandoc.Filter.EmphasizeCode.ChunkingTest where
 
-import           Data.HashMap.Strict               (HashMap)
-import qualified Data.HashMap.Strict               as HashMap
-import           Test.Tasty
 import           Test.Tasty.Hspec
 
-import           Text.Pandoc.Filter.Chunking
-import           Text.Pandoc.Filter.Position
-import           Text.Pandoc.Filter.Range
-import           Text.Pandoc.Filter.Testing.Ranges
+import           Text.Pandoc.Filter.EmphasizeCode.Chunking
+import           Text.Pandoc.Filter.EmphasizeCode.Range
+import           Text.Pandoc.Filter.EmphasizeCode.Testing.Ranges
 
 spec_emphasizeRanges = do
   it "emphasizes a single line range" $ do

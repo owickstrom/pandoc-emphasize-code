@@ -1,14 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
 module Text.Pandoc.Filter.EmphasizeCodeTest where
 
-import           Test.Tasty
 import           Test.Tasty.Hspec
-import           Test.Tasty.HUnit
 
 import qualified Text.Pandoc.Filter.EmphasizeCode as Filter
 import           Text.Pandoc.JSON
 
+(@@?=) :: (Eq a, Show a) => IO a -> a -> IO ()
 (@@?=) a b = a >>= (`shouldBe` b)
 
 emphasizeCode :: Format -> String -> IO Block
