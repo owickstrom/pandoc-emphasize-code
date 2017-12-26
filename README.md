@@ -176,6 +176,8 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 Changelog
 ---------
 
+-   **0.2.0**
+    -   Use Lucid to render HTML, fixes issue \#1
 -   **0.1.1**
     -   Restructured modules
     -   Separated pretty printer
