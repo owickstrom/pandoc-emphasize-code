@@ -27,12 +27,18 @@ printPosition p = printLine (line p) <> ":" <> printColumn (column p)
 printRange :: Range -> Text
 printRange r = printPosition (rangeStart r) <> "-" <> printPosition (rangeEnd r)
 
+printRangesError :: RangesError -> Text
+printRangesError err =
+  case err of
+    EmptyRanges -> "At least one range is required"
+    Overlap r1 r2 -> printRange r1 <> " overlaps with " <> printRange r2
+
 printParseError :: ParseError -> Text
 printParseError err =
   case err of
     InvalidRange start end ->
       "Invalid range: " <> printPosition start <> " to " <> printPosition end
-    InvalidRanges (Overlap r1 r2) -> printRange r1 <> " overlaps with " <> printRange r2
+    InvalidRanges rangesErr -> printRangesError rangesErr
     InvalidRangeFormat t -> "Invalid range: " <> t
     InvalidPosition line' column' ->
       "Invalid position: " <> printLine line' <> " to " <> printColumn column'

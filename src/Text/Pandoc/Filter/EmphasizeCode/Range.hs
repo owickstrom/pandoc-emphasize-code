@@ -11,7 +11,7 @@ module Text.Pandoc.Filter.EmphasizeCode.Range
   , lineIntersectsWithRange
   , Ranges
   , rangesToList
-  , InvalidRanges(..)
+  , RangesError(..)
   , mkRanges
   , LineRange
   , lineRangeLine
@@ -21,15 +21,15 @@ module Text.Pandoc.Filter.EmphasizeCode.Range
   , splitRanges
   ) where
 #if MIN_VERSION_base(4,8,0)
-import           Data.Semigroup              ((<>))
+import           Data.Semigroup                            ((<>))
 #else
 import           Control.Applicative
 import           Data.Monoid
 #endif
-import           Control.Monad               (foldM_, when)
-import           Data.HashMap.Strict         (HashMap)
-import qualified Data.HashMap.Strict         as HashMap
-import           Data.List                   (sortOn)
+import           Control.Monad                             (foldM_, when)
+import           Data.HashMap.Strict                       (HashMap)
+import qualified Data.HashMap.Strict                       as HashMap
+import           Data.List                                 (sortOn)
 
 import           Text.Pandoc.Filter.EmphasizeCode.Position
 
@@ -68,12 +68,14 @@ newtype Ranges =
 rangesToList :: Ranges -> [Range]
 rangesToList (Ranges rs) = rs
 
-data InvalidRanges =
-  Overlap Range
-          Range
+data RangesError
+  = EmptyRanges
+  | Overlap Range
+            Range
   deriving (Show, Eq)
 
-mkRanges :: [Range] -> Either InvalidRanges Ranges
+mkRanges :: [Range] -> Either RangesError Ranges
+mkRanges [] = Left EmptyRanges
 mkRanges ranges = do
   let sorted = sortOn rangeStart ranges
   foldM_ checkOverlap Nothing sorted

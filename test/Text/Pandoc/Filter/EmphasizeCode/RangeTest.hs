@@ -15,11 +15,13 @@ makeLineRanges = mapMaybe mkLineRange'
   where
     mkLineRange' (line', start, end) = mkLineRange line' start end
 
-spec_mkRanges =
+spec_mkRanges = do
   it "sorts ranges" $ do
     rs <- mkRanges' [((1, 1), (1, 7)), ((4, 1), (7, 2)), ((1, 8), (3, 4))]
     map rangeToTuples (rangesToList rs) `shouldBe`
       [((1, 1), (1, 7)), ((1, 8), (3, 4)), ((4, 1), (7, 2))]
+  it "does not accept empty ranges" $
+    mkRanges' [] `shouldThrow` anyException
 
 spec_splitRanges = do
   it "splits one range into line ranges" $ do
