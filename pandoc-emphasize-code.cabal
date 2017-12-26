@@ -11,7 +11,6 @@ build-type:          Simple
 category:            Documentation
 license:             MPL-2.0
 license-file:        LICENSE
-extra-source-files:  CHANGELOG.md
 
 source-repository head
   type:     git
@@ -47,7 +46,10 @@ test-suite filter-tests
     main-is:         Main.hs
     other-modules:   Text.Pandoc.Filter.EmphasizeCodeTest
                      Text.Pandoc.Filter.RangeTest
+                     Text.Pandoc.Filter.ChunkingTest
+                     Text.Pandoc.Filter.Testing.Ranges
     build-depends:   base                 >= 4        && < 5
+                   , unordered-containers >= 0.2      && < 0.3
                    , pandoc-types         >= 1.12     && <= 1.19
                    , pandoc-emphasize-code
                    , tasty
