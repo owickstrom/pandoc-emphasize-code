@@ -30,12 +30,11 @@ script:
 - stack --no-terminal test
 before_deploy:
 - stack --no-terminal install
-- tar czf "$TRAVIS_BUILD_DIR/pandoc-emphasize-code-${TRAVIS_OS_NAME}-${RELEASE_FN}.tar.gz" -C "$HOME/.local/bin/"
-  "./pandoc-emphasize-code"
+- tar czf "$TRAVIS_BUILD_DIR/pandoc-emphasize-code-${TRAVIS_OS_NAME}-${RELEASE_FN}.tar.gz" -C "$HOME/.local/bin/" "./pandoc-emphasize-code"
 deploy:
   provider: releases
   api_key:
-    secure: KofZCUN1WFuFOvdf10ewF95m+AscPrgIQ3RTYpL0VX2ZuAhTsOFzQNRPRO5RXbNA0Y9M7kitA966/caVH8Ly8Z9A3hFzUOd2bDQLkpLLKw7dDujSOPZx9L/YMidT/A3kYheSg7YL6OziYY9Sb0y4xzfPkob6DAKos0YH1DBxY+spbhFx751gTC20IPfGsQ5HNdr5sebNiNogJydSNrFjJvkvYPmsoPUjnniJFgHUjm3rlH2+b6T354IWMlC/4gSaBSVtYFOzo36E96cqkSY5RXS067M80c3nZoSOYJi0qhkc+F2ZyGKF5q+QvA2CbEsw/si8UFC7iFM5sOZ8PU7Ws7h2EQ2QG5BDfiHuuD2NnJyo6YZW5DhmSv3lU4q5ScQjJ1Pi+YERS4sNdP1NQg0/AUvE6Pk60990cSX4x59Cvfq8s7Ks9cdcHiRgKH6X233l8D+EEyWrJyzs0bq+tTLzUQKswZEmUJgPLNaufENk0dxGSNBN6P1r9yCZxn0m2Dg3WVGo+3bsw2LYC2LoT+eTtNST4tC5IGmglgnnV+C17FSCrcZq1OAFlCUZ8tYWVK9j7HPZhdGjA3kdyV7/NQKMg540oApWP+WmFORWmd8gL318uZm6sdJmG6TEAPB86+84FCik6/GWey2y7uCCXu7YdPeVC9ucwvbI+SOkyoFK2Co=
+    secure: ZO2aw3PAMUgBpueiCF/bPZkF0K/kTCnCAlwYNcAy1EZpVPjVfBfq3NjkhpEnoVxWI4N9Fqdg+Td8Um6G0EOrWnIycKQg4xrDfkVI83w3+8Ef/DHhgzSSsbZcrL2CJJpiq02uXcX0y8YL4LpNzEtqY6kcnrcf1dlva70qnUaMhjRu3E5EbFzqq9jdzf8M8FWVwIMaG2WBKNUHzq06w6J54F1ubZ9ON9yVyAgmb8u+xBMSsDvXMJIlfSnMP16mQ8m2LZBIZp2EP93h0aTe5+hlWhFAHoliKVjhPKUDJ3lE4zut3luHDJbpyvCMw4GI/MdiOKJ5cdAUBQZUBqp5GA++XC+ygE17jrLP2DFAq3s3+eUBfNWNK1VXLh5p5uHmPCqqyxBbR53lLUs5A2njXtEAE4CgVXBw/cmWZ7oVYcYWMVdvw+fITI3cqHXk+jbYPslnyn9FVdegXO7hSXIjG73/DIAOnFll4mKY14ylnCeiCqv6Eb+uglQR/1gPAwhyYuJfvW+IvGYK4L9vRnqDH48PGGZZLHsF7KGYx13Pb8oJKffHlxPeE4rLaHJoBoIcFKdJe9742vucebnCyHbhXmiX4NRc2cUkOPpknwiAmpLF8AP0sjO94yNlaMHbSE9FE6ZEzF3Ya02QttxxSiYuWVpkoKB6EZvURS3SwOrbNyK8/kY=
   file: "$TRAVIS_BUILD_DIR/pandoc-emphasize-code-${TRAVIS_OS_NAME}-${RELEASE_FN}.tar.gz"
   skip_cleanup: true
   overwrite: true
