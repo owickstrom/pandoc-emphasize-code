@@ -18,7 +18,26 @@ The filter recognizes code blocks with the `emphasize` attribute present:
       notSoRelevant
     ```
 
-Giving HTML output:
+### Syntax
+
+The value of the `emphasize` attribute is a comma-separated list of ranges.
+Each range is two positions, separated by a dash. A position is a line number,
+followed by a colon, ending with a column number. The syntax can be described
+in EBNF, like so:
+
+``` ebnf
+line     = natural number;
+column   = natural number;
+position = line, ":", column;
+range    = position, "-", position;
+ranges   = range, { (",", range) };
+
+(* definition of natural number excluded for brevity *)
+```
+
+## Rendering to HTML
+
+The code block above would render the following HTML output:
 
 ``` html
 <pre class="haskell"><code>myFunc = do

@@ -61,6 +61,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <nav id="TOC">
 <ul>
 <li><a href="#usage">Usage</a><ul>
+<li><a href="#syntax">Syntax</a></li>
+</ul></li>
+<li><a href="#rendering-to-html">Rendering to HTML</a><ul>
 <li><a href="#rendering-with-latex">Rendering with LaTeX</a></li>
 <li><a href="#regular-highlighting">Regular Highlighting</a></li>
 </ul></li>
@@ -81,7 +84,17 @@ myFunc = do
   andThisToo notThis
   notSoRelevant
 ```</code></pre>
-<p>Giving HTML output:</p>
+<h3 id="syntax">Syntax</h3>
+<p>The value of the <code>emphasize</code> attribute is a comma-separated list of ranges. Each range is two positions, separated by a dash. A position is a line number, followed by a colon, ending with a column number. The syntax can be described in EBNF, like so:</p>
+<pre class="ebnf"><code>line     = natural number;
+column   = natural number;
+position = line, &quot;:&quot;, column;
+range    = position, &quot;-&quot;, position;
+ranges   = range, { (&quot;,&quot;, range) };
+
+(* definition of natural number excluded for brevity *)</code></pre>
+<h2 id="rendering-to-html">Rendering to HTML</h2>
+<p>The code block above would render the following HTML output:</p>
 <div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;haskell&quot;</span><span class="kw">&gt;&lt;code&gt;</span>myFunc = do
   <span class="kw">&lt;em&gt;</span>newStuffHere<span class="kw">&lt;/em&gt;</span>
   <span class="kw">&lt;em&gt;</span>andThisToo<span class="kw">&lt;/em&gt;</span> notThis
