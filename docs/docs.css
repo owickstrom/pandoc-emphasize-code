@@ -205,3 +205,8 @@ footer li:before {
 footer li:first-child:before {
   content: '';
 }
+
+code em {
+  font-weight: bold;
+  font-style: normal;
+}

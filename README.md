@@ -9,6 +9,12 @@
 
 
 
+
+
+
+
+
+
 -   [Usage](#usage)
     -   [Syntax](#syntax)
     -   [Rendering to HTML](#rendering-to-html)
@@ -30,12 +36,8 @@ You can get away with manually writing the target markup, in LaTeX or raw HTML, 
 
 This filter lets you specify *ranges* of a code block to emphasize, and have the filter generate the appropriate markup for you. It recognizes code blocks with the `emphasize` attribute present:
 
-    ```{.haskell emphasize=2:3-2:14,3:3-3:12}
-    myFunc = do
-      newStuffHere
-      andThisToo notThis
-      notSoRelevant
-    ```
+<pre><code>```{.haskell <em>emphasize=2:3-2:14,3:3-3:12</em>}<br>myFunc = do<br>  newStuffHere<br>  andThisToo notThis<br>  notSoRelevant<br>```</code></pre>
+In the example above, the identifier `newStuffHere` and `andThisToo` will be emphasized.
 
 Currently, the following output formats are supported:
 
@@ -59,6 +61,8 @@ ranges          = range, { (",", range) };
 (* definition of natural number excluded for brevity *)
 ```
 
+There must be at least one range in the comma-separated list. A range can span multiple lines.
+
 ### Rendering to HTML
 
 The code block above would render HTML output like the following (lines broken for readability):
@@ -74,12 +78,12 @@ When rendering HTML, the markup can be styled using CSS:
 
 ``` css
 code em {
-  color: red;
-  font-style: italic;
+  font-weight: bold;
+  font-style: normal;
 }
 ```
 
-By default, if no custom styling is applied, it will look something like this:
+By default, if no custom styling is applied, emphasized ranges in HTML will be rendered in italic type. With the CSS rule from above, it will instead look something like this:
 
 <pre class="haskell"><code>myFunc = do<br>  <em>newStuffHere</em><br>  <em>andThisToo</em> notThis<br>  notSoRelevant</code></pre>
 Note that the there is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.
@@ -117,18 +121,20 @@ myFunc = do
 
 You can still use regular Pandoc highlighting (the *skylighting* library):
 
-    ``` {.css}
-    .hello {
-      world: yes;
-    }
+    ``` {.haskell}
+    myFunc = do
+      newStuffHere
+      andThisToo notThis
+      notSoRelevant
     ```
 
 It gives you all the nice colors:
 
-``` css
-.hello {
-  world: yes;
-}
+``` haskell
+myFunc = do
+  newStuffHere
+  andThisToo notThis
+  notSoRelevant
 ```
 
 The drawback is that you have two different highlighting systems now, one for emphasized code, one for regular code blocks.

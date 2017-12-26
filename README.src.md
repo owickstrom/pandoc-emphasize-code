@@ -3,8 +3,11 @@ title: pandoc-emphasize-code
 subtitle: A Pandoc filter for emphasizing code in fenced blocks.
 header-includes:
   - \usepackage{listings}
-  - \lstset{basicstyle=\ttfamily}
-  - \newcommand{\CodeEmphasis}[1]{\textit{#1}}
+  - \usepackage[T1]{fontenc}
+  - \usepackage[default]{sourcesanspro}
+  - \usepackage{sourcecodepro}
+  - \lstset{basicstyle=\ttfamily,columns=fixed,keywordstyle=\sffamily}
+  - \newcommand{\CodeEmphasis}[1]{\textbf{#1}}
 ---
 
 ## Usage
@@ -22,12 +25,17 @@ This filter lets you specify *ranges* of a code block to emphasize, and have
 the filter generate the appropriate markup for you. It recognizes code blocks
 with the `emphasize` attribute present:
 
-    ```{.haskell emphasize=2:3-2:14,3:3-3:12}
-    myFunc = do
-      newStuffHere
-      andThisToo notThis
-      notSoRelevant
-    ```
+````{emphasize=1:14-1:40}
+```{.haskell emphasize=2:3-2:14,3:3-3:12}
+myFunc = do
+  newStuffHere
+  andThisToo notThis
+  notSoRelevant
+```
+````
+
+In the example above, the identifier `newStuffHere` and `andThisToo` will be
+emphasized.
 
 Currently, the following output formats are supported:
 
@@ -53,6 +61,9 @@ ranges          = range, { (",", range) };
 (* definition of natural number excluded for brevity *)
 ```
 
+There must be at least one range in the comma-separated list. A range can
+span multiple lines.
+
 ### Rendering to HTML
 
 The code block above would render HTML output like the following (lines broken
@@ -69,12 +80,14 @@ When rendering HTML, the markup can be styled using CSS:
 
 ``` css
 code em {
-  color: red;
-  font-style: italic;
+  font-weight: bold;
+  font-style: normal;
 }
 ```
 
-By default, if no custom styling is applied, it will look something like this:
+By default, if no custom styling is applied, emphasized ranges in HTML will be
+rendered in italic type. With the CSS rule from above, it will instead look
+something like this:
 
 ```{.haskell emphasize=2:3-2:14,3:3-3:12}
 myFunc = do
@@ -124,18 +137,20 @@ myFunc = do
 
 You can still use regular Pandoc highlighting (the *skylighting* library):
 
-    ``` {.css}
-    .hello {
-      world: yes;
-    }
+    ``` {.haskell}
+    myFunc = do
+      newStuffHere
+      andThisToo notThis
+      notSoRelevant
     ```
 
 It gives you all the nice colors:
 
-``` css
-.hello {
-  world: yes;
-}
+``` haskell
+myFunc = do
+  newStuffHere
+  andThisToo notThis
+  notSoRelevant
 ```
 
 The drawback is that you have two different highlighting systems now, one

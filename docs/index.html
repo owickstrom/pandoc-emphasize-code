@@ -52,6 +52,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   
   
   
+  
+  
+  
 </head>
 <body>
 <header>
@@ -79,12 +82,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Often when working with code examples in documentation, printed or web hosted, or in presentation slideshows, you might want to emphasize parts of a code snippet.</p>
 <p>You can get away with manually writing the target markup, in LaTeX or raw HTML, but if you want to render the same document in multiple output formats, this gets really tedious. Also, having to write the markup by hand can be error prone.</p>
 <p>This filter lets you specify <em>ranges</em> of a code block to emphasize, and have the filter generate the appropriate markup for you. It recognizes code blocks with the <code>emphasize</code> attribute present:</p>
-<pre><code>```{.haskell emphasize=2:3-2:14,3:3-3:12}
-myFunc = do
-  newStuffHere
-  andThisToo notThis
-  notSoRelevant
-```</code></pre>
+<pre><code>```{.haskell <em>emphasize=2:3-2:14,3:3-3:12</em>}<br>myFunc = do<br>  newStuffHere<br>  andThisToo notThis<br>  notSoRelevant<br>```</code></pre>
+<p>In the example above, the identifier <code>newStuffHere</code> and <code>andThisToo</code> will be emphasized.</p>
 <p>Currently, the following output formats are supported:</p>
 <ul>
 <li>HTML (<code>html</code> and <code>html5</code>)</li>
@@ -101,6 +100,7 @@ range           = position, &quot;-&quot;, position;
 ranges          = range, { (&quot;,&quot;, range) };
 
 (* definition of natural number excluded for brevity *)</code></pre>
+<p>There must be at least one range in the comma-separated list. A range can span multiple lines.</p>
 <h3 id="rendering-to-html">Rendering to HTML</h3>
 <p>The code block above would render HTML output like the following (lines broken for readability):</p>
 <div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;haskell&quot;</span><span class="kw">&gt;&lt;code&gt;</span>myFunc = do<span class="kw">&lt;br&gt;</span>
@@ -109,10 +109,10 @@ ranges          = range, { (&quot;,&quot;, range) };
   notSoRelevant<span class="kw">&lt;/code&gt;&lt;/pre&gt;</span></code></pre></div>
 <p>When rendering HTML, the markup can be styled using CSS:</p>
 <div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css">code em <span class="kw">{</span>
-  <span class="kw">color:</span> <span class="dt">red</span><span class="kw">;</span>
-  <span class="kw">font-style:</span> <span class="dt">italic</span><span class="kw">;</span>
+  <span class="kw">font-weight:</span> <span class="dt">bold</span><span class="kw">;</span>
+  <span class="kw">font-style:</span> <span class="dt">normal</span><span class="kw">;</span>
 <span class="kw">}</span></code></pre></div>
-<p>By default, if no custom styling is applied, it will look something like this:</p>
+<p>By default, if no custom styling is applied, emphasized ranges in HTML will be rendered in italic type. With the CSS rule from above, it will instead look something like this:</p>
 <pre class="haskell"><code>myFunc = do<br>  <em>newStuffHere</em><br>  <em>andThisToo</em> notThis<br>  notSoRelevant</code></pre>
 <p>Note that the there is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.</p>
 <h3 id="rendering-with-latex">Rendering with LaTeX</h3>
@@ -137,15 +137,17 @@ myFunc = do
 ```</code></pre></div>
 <h3 id="regular-highlighting">Regular Highlighting</h3>
 <p>You can still use regular Pandoc highlighting (the <em>skylighting</em> library):</p>
-<pre><code>``` {.css}
-.hello {
-  world: yes;
-}
+<pre><code>``` {.haskell}
+myFunc = do
+  newStuffHere
+  andThisToo notThis
+  notSoRelevant
 ```</code></pre>
 <p>It gives you all the nice colors:</p>
-<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.hello</span> <span class="kw">{</span>
-  <span class="kw">world:</span> yes<span class="kw">;</span>
-<span class="kw">}</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">myFunc <span class="fu">=</span> <span class="kw">do</span>
+  newStuffHere
+  andThisToo notThis
+  notSoRelevant</code></pre></div>
 <p>The drawback is that you have two different highlighting systems now, one for emphasized code, one for regular code blocks.</p>
 <h2 id="install">Install</h2>
 <p>Executables for Linux and macOS are available in the <a href="https://github.com/owickstrom/pandoc-emphasize-code/releases">Releases page</a>.</p>
