@@ -24,7 +24,11 @@
 Usage
 -----
 
-The filter recognizes code blocks with the `emphasize` attribute present:
+Often when working with code examples in documentation, printed or web hosted, or in presentation slideshows, you might want to emphasize parts of a code snippet.
+
+You can get away with manually writing the target markup, in LaTeX or raw HTML, but if you want to render the same document in multiple output formats, this gets really tedious. Also, having to write the markup by hand can be error prone.
+
+This filter lets you specify *ranges* of a code block to emphasize, and have the filter generate the appropriate markup for you. It recognizes code blocks with the `emphasize` attribute present:
 
     ```{.haskell emphasize=2:3-2:14,3:3-3:12}
     myFunc = do
@@ -33,16 +37,24 @@ The filter recognizes code blocks with the `emphasize` attribute present:
       notSoRelevant
     ```
 
+Currently, the following output formats are supported:
+
+-   HTML (`html` and `html5`)
+-   LaTeX (`latex` and `beamer`)
+-   GitHub-Flavored Markdown (`markdown_github`)
+
 ### Syntax
 
-The value of the `emphasize` attribute is a comma-separated list of ranges. Each range is two positions, separated by a dash. A position is a line number, followed by a colon, ending with a column number. The syntax can be described in EBNF, like so:
+The value of the `emphasize` attribute is a comma-separated list of *ranges*. A *range* consists of two positions, separated by a dash. A *position* consists of a *line number* and a *column number*, separated by a colon.
+
+The syntax can be described in EBNF, like so:
 
 ``` ebnf
-line     = natural number;
-column   = natural number;
-position = line, ":", column;
-range    = position, "-", position;
-ranges   = range, { (",", range) };
+line number     = natural number;
+column number   = natural number;
+position        = line number, ":", column number;
+range           = position, "-", position;
+ranges          = range, { (",", range) };
 
 (* definition of natural number excluded for brevity *)
 ```

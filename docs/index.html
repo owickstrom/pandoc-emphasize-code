@@ -77,20 +77,29 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 </nav>
 <h2 id="usage">Usage</h2>
-<p>The filter recognizes code blocks with the <code>emphasize</code> attribute present:</p>
+<p>Often when working with code examples in documentation, printed or web hosted, or in presentation slideshows, you might want to emphasize parts of a code snippet.</p>
+<p>You can get away with manually writing the target markup, in LaTeX or raw HTML, but if you want to render the same document in multiple output formats, this gets really tedious. Also, having to write the markup by hand can be error prone.</p>
+<p>This filter lets you specify <em>ranges</em> of a code block to emphasize, and have the filter generate the appropriate markup for you. It recognizes code blocks with the <code>emphasize</code> attribute present:</p>
 <pre><code>```{.haskell emphasize=2:3-2:14,3:3-3:12}
 myFunc = do
   newStuffHere
   andThisToo notThis
   notSoRelevant
 ```</code></pre>
+<p>Currently, the following output formats are supported:</p>
+<ul>
+<li>HTML (<code>html</code> and <code>html5</code>)</li>
+<li>LaTeX (<code>latex</code> and <code>beamer</code>)</li>
+<li>GitHub-Flavored Markdown (<code>markdown_github</code>)</li>
+</ul>
 <h3 id="syntax">Syntax</h3>
-<p>The value of the <code>emphasize</code> attribute is a comma-separated list of ranges. Each range is two positions, separated by a dash. A position is a line number, followed by a colon, ending with a column number. The syntax can be described in EBNF, like so:</p>
-<pre class="ebnf"><code>line     = natural number;
-column   = natural number;
-position = line, &quot;:&quot;, column;
-range    = position, &quot;-&quot;, position;
-ranges   = range, { (&quot;,&quot;, range) };
+<p>The value of the <code>emphasize</code> attribute is a comma-separated list of <em>ranges</em>. A <em>range</em> consists of two positions, separated by a dash. A <em>position</em> consists of a <em>line number</em> and a <em>column number</em>, separated by a colon.</p>
+<p>The syntax can be described in EBNF, like so:</p>
+<pre class="ebnf"><code>line number     = natural number;
+column number   = natural number;
+position        = line number, &quot;:&quot;, column number;
+range           = position, &quot;-&quot;, position;
+ranges          = range, { (&quot;,&quot;, range) };
 
 (* definition of natural number excluded for brevity *)</code></pre>
 <h2 id="rendering-to-html">Rendering to HTML</h2>
