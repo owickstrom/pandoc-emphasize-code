@@ -11,7 +11,7 @@
 
 -   [Usage](#usage)
     -   [Syntax](#syntax)
--   [Rendering to HTML](#rendering-to-html)
+    -   [Rendering to HTML](#rendering-to-html)
     -   [Rendering with LaTeX](#rendering-with-latex)
     -   [Regular Highlighting](#regular-highlighting)
 -   [Install](#install)
@@ -59,8 +59,7 @@ ranges          = range, { (",", range) };
 (* definition of natural number excluded for brevity *)
 ```
 
-Rendering to HTML
------------------
+### Rendering to HTML
 
 The code block above would render the following HTML output:
 

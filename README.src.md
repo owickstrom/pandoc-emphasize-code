@@ -53,7 +53,7 @@ ranges          = range, { (",", range) };
 (* definition of natural number excluded for brevity *)
 ```
 
-## Rendering to HTML
+### Rendering to HTML
 
 The code block above would render the following HTML output:
 
