@@ -71,12 +71,22 @@ for readability):
 
 ``` html
 <pre class="haskell"><code>myFunc = do<br>
-  <em>newStuffHere</em><br>
-  <em>andThisToo</em> notThis<br>
+  <mark>newStuffHere</mark><br>
+  <mark>andThisToo</mark> notThis<br>
   notSoRelevant</code></pre>
 ```
 
-When rendering HTML, the markup can be styled using CSS:
+When rendering HTML5, the markup can be styled using CSS:
+
+``` css
+code mark {
+  font-weight: bold;
+  font-style: normal;
+}
+```
+
+The `html` output format (not `html5`) uses `<em>` tags instead of `<mark>`
+tags.
 
 ``` css
 code em {

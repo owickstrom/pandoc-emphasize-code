@@ -22,7 +22,8 @@ printAndFail = fail . Text.unpack . printParseError
 toRenderer ::
      Pandoc.Format -> Maybe (Pandoc.Attr -> EmphasizedLines -> Pandoc.Block)
 toRenderer f
-  | f `elem` ["html", "html5", "markdown_github"] = Just (renderEmphasized Html)
+  | f `elem` ["html", "markdown_github"] = Just (renderEmphasized (Html Em))
+  | f == "html5" = Just (renderEmphasized (Html Mark))
   | f == "latex" = Just (renderEmphasized Latex)
   | f == "beamer" = Just (renderEmphasized Latex)
   | otherwise = Nothing

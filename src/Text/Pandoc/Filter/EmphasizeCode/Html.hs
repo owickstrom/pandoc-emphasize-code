@@ -1,27 +1,36 @@
 module Text.Pandoc.Filter.EmphasizeCode.Html
-  ( Html(Html)
+  ( EmphasisTag (..)
+  , Html(Html)
   ) where
 
-import Data.List (intersperse)
-import qualified Data.Text as Text
-import qualified Data.Text.Lazy as TextLazy
-import qualified Lucid as Html
-import qualified Text.Pandoc.Definition as Pandoc
+import           Data.List                                   (intersperse)
+import qualified Data.Text                                   as Text
+import qualified Data.Text.Lazy                              as TextLazy
+import qualified Lucid                                       as Html
+import qualified Text.Pandoc.Definition                      as Pandoc
 
-import Text.Pandoc.Filter.EmphasizeCode.Chunking
-import Text.Pandoc.Filter.EmphasizeCode.Renderable
+import           Text.Pandoc.Filter.EmphasizeCode.Chunking
+import           Text.Pandoc.Filter.EmphasizeCode.Renderable
 
-data Html =
-  Html
+data EmphasisTag
+  = Em
+  | Mark
 
-emphasizeChunkHtml :: LineChunk -> Html.Html ()
-emphasizeChunkHtml chunk =
+newtype Html =
+  Html EmphasisTag
+
+emphasisElement :: EmphasisTag -> Html.Html () -> Html.Html ()
+emphasisElement Em = Html.em_
+emphasisElement Mark = Html.mark_
+
+emphasizeChunkHtml :: EmphasisTag -> LineChunk -> Html.Html ()
+emphasizeChunkHtml tag chunk =
   case chunk of
-    Literal t -> Html.toHtml t
-    Emphasized t -> Html.em_ (Html.toHtml t)
+    Literal t    -> Html.toHtml t
+    Emphasized t -> emphasisElement tag (Html.toHtml t)
 
 instance Renderable Html where
-  renderEmphasized _ (_, classes, _) lines' =
+  renderEmphasized (Html tag) (_, classes, _) lines' =
     Pandoc.RawBlock
       (Pandoc.Format "html")
       (TextLazy.unpack (Html.renderText emphasized))
@@ -34,5 +43,6 @@ instance Renderable Html where
         Html.pre_ classAttrs $
         Html.code_ $
         mconcat
-          (intersperse (Html.br_ []) (map (foldMap emphasizeChunkHtml) lines'))
-
+          (intersperse
+             (Html.br_ [])
+             (map (foldMap (emphasizeChunkHtml tag)) lines'))
