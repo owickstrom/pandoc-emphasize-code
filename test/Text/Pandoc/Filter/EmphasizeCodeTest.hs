@@ -25,9 +25,9 @@ spec_emphasizeCode = do
     RawBlock
       "html"
       (mconcat
-         [ "<pre class=\"my-lang\"><code>hello world\n"
-         , "hej <em>världen</em>\n"
-         , "<em>hallo</em> welt\n"
+         [ "<pre class=\"my-lang\"><code>hello world<br>"
+         , "hej <em>världen</em><br>"
+         , "<em>hallo</em> welt<br>"
          , "hei verden</code></pre>"
          ])
   it "emphasizes HTML and a single range over multiple lines" $
@@ -35,9 +35,9 @@ spec_emphasizeCode = do
     RawBlock
       "html"
       (mconcat
-         [ "<pre class=\"my-lang\"><code>hello world\n"
-         , "hej <em>världen</em>\n"
-         , "<em>hallo welt</em>\n"
+         [ "<pre class=\"my-lang\"><code>hello world<br>"
+         , "hej <em>världen</em><br>"
+         , "<em>hallo welt</em><br>"
          , "<em>hei</em> verden</code></pre>"
          ])
   it "emphasizes HTML and multiple ranges" $
@@ -45,9 +45,9 @@ spec_emphasizeCode = do
     RawBlock
       "html"
       (mconcat
-         [ "<pre class=\"my-lang\"><code><em>hello</em> world\n"
-         , "hej <em>världen</em>\n"
-         , "<em>hallo</em> welt\n"
+         [ "<pre class=\"my-lang\"><code><em>hello</em> world<br>"
+         , "hej <em>världen</em><br>"
+         , "<em>hallo</em> welt<br>"
          , "hei verden</code></pre>"
          ])
   it "emphasizes latex and multiple ranges" $

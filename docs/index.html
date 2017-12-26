@@ -102,21 +102,18 @@ ranges          = range, { (&quot;,&quot;, range) };
 
 (* definition of natural number excluded for brevity *)</code></pre>
 <h3 id="rendering-to-html">Rendering to HTML</h3>
-<p>The code block above would render the following HTML output:</p>
-<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;haskell&quot;</span><span class="kw">&gt;&lt;code&gt;</span>myFunc = do
-  <span class="kw">&lt;em&gt;</span>newStuffHere<span class="kw">&lt;/em&gt;</span>
-  <span class="kw">&lt;em&gt;</span>andThisToo<span class="kw">&lt;/em&gt;</span> notThis
+<p>The code block above would render HTML output like the following (lines broken for readability):</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;haskell&quot;</span><span class="kw">&gt;&lt;code&gt;</span>myFunc = do<span class="kw">&lt;br&gt;</span>
+  <span class="kw">&lt;em&gt;</span>newStuffHere<span class="kw">&lt;/em&gt;&lt;br&gt;</span>
+  <span class="kw">&lt;em&gt;</span>andThisToo<span class="kw">&lt;/em&gt;</span> notThis<span class="kw">&lt;br&gt;</span>
   notSoRelevant<span class="kw">&lt;/code&gt;&lt;/pre&gt;</span></code></pre></div>
-<p>When rendering to HTML, the markup can be styled using CSS:</p>
+<p>When rendering HTML, the markup can be styled using CSS:</p>
 <div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css">code em <span class="kw">{</span>
   <span class="kw">color:</span> <span class="dt">red</span><span class="kw">;</span>
   <span class="kw">font-style:</span> <span class="dt">italic</span><span class="kw">;</span>
 <span class="kw">}</span></code></pre></div>
 <p>By default, if no custom styling is applied, it will look something like this:</p>
-<pre class="haskell"><code>myFunc = do
-  <em>newStuffHere</em>
-  <em>andThisToo</em> notThis
-  notSoRelevant</code></pre>
+<pre class="haskell"><code>myFunc = do<br>  <em>newStuffHere</em><br>  <em>andThisToo</em> notThis<br>  notSoRelevant</code></pre>
 <p>Note that the there is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.</p>
 <h3 id="rendering-with-latex">Rendering with LaTeX</h3>
 <p>When rendering using LaTeX, two things are required:</p>
@@ -191,7 +188,7 @@ myFunc = do
 <footer>
   <ul>
     <li>A project by <a href="https://twitter.com/owickstrom">@owickstrom</a></li>
-    <li><a href="https://github.com/owickstrom/pandoc-emphasize-code/https://owickstrom.github.io/pandoc-emphasize-code/pandoc-emphasize-code.pdf">PDF Version</a></li>
+    <li><a href="https://owickstrom.github.io/pandoc-emphasize-code/pandoc-emphasize-code.pdf">PDF Version</a></li>
     <li><a href="https://github.com/owickstrom/pandoc-emphasize-code">Source Code</a></li>
   </ul>
 </footer>

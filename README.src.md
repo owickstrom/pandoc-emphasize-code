@@ -55,16 +55,17 @@ ranges          = range, { (",", range) };
 
 ### Rendering to HTML
 
-The code block above would render the following HTML output:
+The code block above would render HTML output like the following (lines broken
+for readability):
 
 ``` html
-<pre class="haskell"><code>myFunc = do
-  <em>newStuffHere</em>
-  <em>andThisToo</em> notThis
+<pre class="haskell"><code>myFunc = do<br>
+  <em>newStuffHere</em><br>
+  <em>andThisToo</em> notThis<br>
   notSoRelevant</code></pre>
 ```
 
-When rendering to HTML, the markup can be styled using CSS:
+When rendering HTML, the markup can be styled using CSS:
 
 ``` css
 code em {
