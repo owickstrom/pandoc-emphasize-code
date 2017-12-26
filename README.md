@@ -44,6 +44,7 @@ Currently, the following output formats are supported:
 -   HTML (`html` and `html5`)
 -   LaTeX (`latex` and `beamer`)
 -   GitHub-Flavored Markdown (`markdown_github`)
+-   RevealJS (`revealjs`)
 
 ### Syntax
 
@@ -193,6 +194,9 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 Changelog
 ---------
 
+-   **0.2.1**
+    -   Support `revealjs` output
+    -   Use `<mark>` for HTML5 and RevealJS, `<em>` for HTML and GFM
 -   **0.2.0**
     -   Use Lucid to render HTML, fixes issue \#1
 -   **0.1.1**

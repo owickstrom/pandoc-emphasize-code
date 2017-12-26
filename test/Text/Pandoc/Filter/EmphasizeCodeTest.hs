@@ -8,6 +8,28 @@ import           Test.Tasty.Hspec
 import qualified Text.Pandoc.Filter.EmphasizeCode as Filter
 import           Text.Pandoc.JSON
 
+singleRangeHtmlMark :: Block
+singleRangeHtmlMark =
+  RawBlock
+    "html"
+    (mconcat
+       [ "<pre class=\"my-lang\"><code>hello world<br>"
+       , "hej <mark>världen</mark><br>"
+       , "<mark>hallo</mark> welt<br>"
+       , "hei verden</code></pre>"
+       ])
+
+singleRangeHtmlEm :: Block
+singleRangeHtmlEm =
+  RawBlock
+    "html"
+    (mconcat
+       [ "<pre class=\"my-lang\"><code>hello world<br>"
+       , "hej <em>världen</em><br>"
+       , "<em>hallo</em> welt<br>"
+       , "hei verden</code></pre>"
+       ])
+
 emphasizeCode :: Format -> String -> IO Block
 emphasizeCode format ranges =
   Filter.emphasizeCode
@@ -18,15 +40,7 @@ emphasizeCode format ranges =
 
 spec_emphasizeCode = do
   it "emphasizes HTML and a single range" $
-    emphasizeCode "html5" "2:5-3:5" `shouldReturn`
-    RawBlock
-      "html"
-      (mconcat
-         [ "<pre class=\"my-lang\"><code>hello world<br>"
-         , "hej <mark>världen</mark><br>"
-         , "<mark>hallo</mark> welt<br>"
-         , "hei verden</code></pre>"
-         ])
+    emphasizeCode "html5" "2:5-3:5" `shouldReturn` singleRangeHtmlMark
   it "emphasizes HTML and a single range over multiple lines" $
     emphasizeCode "html5" "2:5-4:3" `shouldReturn`
     RawBlock
@@ -47,26 +61,12 @@ spec_emphasizeCode = do
          , "<mark>hallo</mark> welt<br>"
          , "hei verden</code></pre>"
          ])
+  it "emphasizes RevealJS HTML using <mark>" $
+    emphasizeCode "revealjs" "2:5-3:5" `shouldReturn` singleRangeHtmlMark
   it "emphasizes HTML4 using <em>" $
-    emphasizeCode "html" "2:5-3:5" `shouldReturn`
-    RawBlock
-      "html"
-      (mconcat
-         [ "<pre class=\"my-lang\"><code>hello world<br>"
-         , "hej <em>världen</em><br>"
-         , "<em>hallo</em> welt<br>"
-         , "hei verden</code></pre>"
-         ])
+    emphasizeCode "html" "2:5-3:5" `shouldReturn` singleRangeHtmlEm
   it "emphasizes markdown_github using <em>" $
-    emphasizeCode "markdown_github" "2:5-3:5" `shouldReturn`
-    RawBlock
-      "html"
-      (mconcat
-         [ "<pre class=\"my-lang\"><code>hello world<br>"
-         , "hej <em>världen</em><br>"
-         , "<em>hallo</em> welt<br>"
-         , "hei verden</code></pre>"
-         ])
+    emphasizeCode "markdown_github" "2:5-3:5" `shouldReturn` singleRangeHtmlEm
   it "emphasizes latex and multiple ranges" $
     emphasizeCode "latex" "1:1-1:5,2:5-3:5" `shouldReturn`
     RawBlock
@@ -79,4 +79,5 @@ spec_emphasizeCode = do
          , "hei verden\n"
          , "\\end{lstlisting}\n"
          ])
+
 {-# ANN module ("HLint: ignore Use camelCase" :: String) #-}
