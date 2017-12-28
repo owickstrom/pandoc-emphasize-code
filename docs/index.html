@@ -113,22 +113,17 @@ ranges          = range, { (&quot;,&quot;, range) };
   <span class="kw">&lt;mark&gt;</span>newStuffHere<span class="kw">&lt;/mark&gt;</span>
   <span class="kw">&lt;mark&gt;</span>andThisToo<span class="kw">&lt;/mark&gt;</span> notThis
   notSoRelevant<span class="kw">&lt;/code&gt;&lt;/pre&gt;</span></code></pre></div>
-<p>When rendering HTML5, the markup can be styled using CSS:</p>
+<p>When rendering to <code>html5</code> or <code>revealjs</code>, the emphasized ranges are wrapped in <code>&lt;mark&gt;</code> tags. The default browser styling is black text on yellow background, but can be customized with CSS:</p>
 <div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css">code mark <span class="kw">{</span>
-  <span class="kw">font-weight:</span> <span class="dt">bold</span><span class="kw">;</span>
-  <span class="kw">font-style:</span> <span class="dt">normal</span><span class="kw">;</span>
+  <span class="kw">background-color:</span> <span class="dt">black</span><span class="kw">;</span>
+  <span class="kw">color:</span> <span class="dt">white</span><span class="kw">;</span>
 <span class="kw">}</span></code></pre></div>
-<p>The <code>html</code> output format (not <code>html5</code>) uses <code>&lt;em&gt;</code> tags instead of <code>&lt;mark&gt;</code> tags.</p>
+<p>The <code>html</code> and <code>markdown_github</code> output formats use <code>&lt;em&gt;</code> tags instead of <code>&lt;mark&gt;</code> tags. By default, <code>&lt;em&gt;</code> tags are rendered in italic type, but can be customized with CSS:</p>
 <div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css">code em <span class="kw">{</span>
   <span class="kw">font-weight:</span> <span class="dt">bold</span><span class="kw">;</span>
   <span class="kw">font-style:</span> <span class="dt">normal</span><span class="kw">;</span>
 <span class="kw">}</span></code></pre></div>
-<p>By default, if no custom styling is applied, emphasized ranges in HTML will be rendered in italic type. With the CSS rule from above, it will instead look something like this:</p>
-<pre class="haskell"><code>myFunc = do
-  <mark>newStuffHere</mark>
-  <mark>andThisToo</mark> notThis
-  notSoRelevant</code></pre>
-<p>Note that the there is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.</p>
+<p><strong>NOTE:</strong> There is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.</p>
 <h3 id="rendering-with-latex">Rendering with LaTeX</h3>
 <p>When rendering using LaTeX, two things are required:</p>
 <ul>

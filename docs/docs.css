@@ -69,10 +69,6 @@ pre code {
   line-height: inherit;
 }
 
-code em {
-  font-style: italic;
-}
-
 pre:before {
   display: block;
   content: attr(caption);

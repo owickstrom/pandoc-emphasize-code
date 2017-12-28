@@ -80,16 +80,16 @@ The code block above would render HTML output like the following (lines broken f
   notSoRelevant</code></pre>
 ```
 
-When rendering HTML5, the markup can be styled using CSS:
+When rendering to `html5` or `revealjs`, the emphasized ranges are wrapped in `<mark>` tags. The default browser styling is black text on yellow background, but can be customized with CSS:
 
 ``` css
 code mark {
-  font-weight: bold;
-  font-style: normal;
+  background-color: black;
+  color: white;
 }
 ```
 
-The `html` output format (not `html5`) uses `<em>` tags instead of `<mark>` tags.
+The `html` and `markdown_github` output formats use `<em>` tags instead of `<mark>` tags. By default, `<em>` tags are rendered in italic type, but can be customized with CSS:
 
 ``` css
 code em {
@@ -98,13 +98,7 @@ code em {
 }
 ```
 
-By default, if no custom styling is applied, emphasized ranges in HTML will be rendered in italic type. With the CSS rule from above, it will instead look something like this:
-
-<pre class="haskell"><code>myFunc = do
-  <em>newStuffHere</em>
-  <em>andThisToo</em> notThis
-  notSoRelevant</code></pre>
-Note that the there is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.
+**NOTE:** There is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc's highlighter and embed custom HTML tags. You might be able to add that using a Javascript highlighter running on the client.
 
 ### Rendering with LaTeX
 

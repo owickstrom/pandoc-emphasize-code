@@ -1,4 +1,4 @@
-all: README.md docs/pandoc-emphasize-code.pdf docs/index.html
+all: README.md docs/index.html docs/pandoc-emphasize-code.pdf
 
 README.md: README.src.md docs/template.md Makefile
 	stack exec pandoc -- \
