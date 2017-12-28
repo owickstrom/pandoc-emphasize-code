@@ -71,9 +71,9 @@ The code block above would render HTML output like the following (lines broken
 for readability):
 
 ``` html
-<pre class="haskell"><code>myFunc = do<br>
-  <mark>newStuffHere</mark><br>
-  <mark>andThisToo</mark> notThis<br>
+<pre class="haskell"><code>myFunc = do
+  <mark>newStuffHere</mark>
+  <mark>andThisToo</mark> notThis
   notSoRelevant</code></pre>
 ```
 

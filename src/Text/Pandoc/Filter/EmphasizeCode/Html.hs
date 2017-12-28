@@ -44,5 +44,5 @@ instance Renderable Html where
         Html.code_ $
         mconcat
           (intersperse
-             (Html.br_ [])
+             (Html.toHtmlRaw "\n")
              (map (foldMap (emphasizeChunkHtml tag)) lines'))

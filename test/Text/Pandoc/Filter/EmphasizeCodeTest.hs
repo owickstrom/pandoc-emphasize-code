@@ -13,9 +13,9 @@ singleRangeHtmlMark =
   RawBlock
     "html"
     (mconcat
-       [ "<pre class=\"my-lang\"><code>hello world<br>"
-       , "hej <mark>världen</mark><br>"
-       , "<mark>hallo</mark> welt<br>"
+       [ "<pre class=\"my-lang\"><code>hello world\n"
+       , "hej <mark>världen</mark>\n"
+       , "<mark>hallo</mark> welt\n"
        , "hei verden</code></pre>"
        ])
 
@@ -24,9 +24,9 @@ singleRangeHtmlEm =
   RawBlock
     "html"
     (mconcat
-       [ "<pre class=\"my-lang\"><code>hello world<br>"
-       , "hej <em>världen</em><br>"
-       , "<em>hallo</em> welt<br>"
+       [ "<pre class=\"my-lang\"><code>hello world\n"
+       , "hej <em>världen</em>\n"
+       , "<em>hallo</em> welt\n"
        , "hei verden</code></pre>"
        ])
 
@@ -46,9 +46,9 @@ spec_emphasizeCode = do
     RawBlock
       "html"
       (mconcat
-         [ "<pre class=\"my-lang\"><code>hello world<br>"
-         , "hej <mark>världen</mark><br>"
-         , "<mark>hallo welt</mark><br>"
+         [ "<pre class=\"my-lang\"><code>hello world\n"
+         , "hej <mark>världen</mark>\n"
+         , "<mark>hallo welt</mark>\n"
          , "<mark>hei</mark> verden</code></pre>"
          ])
   it "emphasizes HTML and multiple ranges" $
@@ -56,9 +56,9 @@ spec_emphasizeCode = do
     RawBlock
       "html"
       (mconcat
-         [ "<pre class=\"my-lang\"><code><mark>hello</mark> world<br>"
-         , "hej <mark>världen</mark><br>"
-         , "<mark>hallo</mark> welt<br>"
+         [ "<pre class=\"my-lang\"><code><mark>hello</mark> world\n"
+         , "hej <mark>världen</mark>\n"
+         , "<mark>hallo</mark> welt\n"
          , "hei verden</code></pre>"
          ])
   it "emphasizes RevealJS HTML using <mark>" $
