@@ -202,6 +202,8 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 Changelog
 ---------
 
+-   (next)
+    -   Revert to use newlines in HTML `pre` tags
 -   **0.2.1**
     -   Support `revealjs` output
     -   Use `<mark>` for HTML5 and RevealJS, `<em>` for HTML and GFM
