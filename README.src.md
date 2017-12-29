@@ -206,6 +206,7 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 
 * (next)
     - Revert to use newlines in HTML `pre` tags
+    - Use default `Setup.hs` script
 * **0.2.1**
     - Support `revealjs` output
     - Use `<mark>` for HTML5 and RevealJS, `<em>` for HTML and GFM
