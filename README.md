@@ -196,7 +196,7 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 Changelog
 ---------
 
--   (next)
+-   **0.2.2**
     -   Revert to use newlines in HTML `pre` tags
     -   Use default `Setup.hs` script
 -   **0.2.1**
