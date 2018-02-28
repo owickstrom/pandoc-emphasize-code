@@ -204,6 +204,9 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 
 ## Changelog
 
+- **0.2.3**
+    - Allow single-position range, i.e. one where the start and end is the same
+      position, which is needed to emphasize a single character.
 * **0.2.2**
     - Revert to use newlines in HTML `pre` tags
     - Use default `Setup.hs` script
