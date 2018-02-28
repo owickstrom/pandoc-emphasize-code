@@ -16,6 +16,9 @@ makeLineRanges = mapMaybe mkLineRange'
     mkLineRange' (line', start, end) = mkLineRange line' start end
 
 spec_mkRanges = do
+  it "accepts single-position range" $ do
+    rs <- mkRanges' [((1, 1), (1, 1))]
+    map rangeToTuples (rangesToList rs) `shouldBe` [((1, 1), (1, 1))]
   it "sorts ranges" $ do
     rs <- mkRanges' [((1, 1), (1, 7)), ((4, 1), (7, 2)), ((1, 8), (3, 4))]
     map rangeToTuples (rangesToList rs) `shouldBe`

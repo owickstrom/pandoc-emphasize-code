@@ -40,7 +40,7 @@ data Range = Range
 
 mkRange :: Position -> Position -> Maybe Range
 mkRange s e
-  | s < e = Just (Range s e)
+  | s <= e = Just (Range s e)
   | otherwise = Nothing
 
 rangeToTuple :: Range -> (Position, Position)
