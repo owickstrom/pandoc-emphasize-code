@@ -30,7 +30,7 @@ printRange r = printPosition (rangeStart r) <> "-" <> printPosition (rangeEnd r)
 printRangesError :: RangesError -> Text
 printRangesError err =
   case err of
-    EmptyRanges -> "At least one range is required"
+    EmptyRanges   -> "At least one range is required"
     Overlap r1 r2 -> printRange r1 <> " overlaps with " <> printRange r2
 
 printParseError :: ParseError -> Text

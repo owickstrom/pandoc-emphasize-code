@@ -4,6 +4,7 @@
 module Text.Pandoc.Filter.EmphasizeCode
   ( emphasizeCode
   ) where
+
 import qualified Data.HashMap.Strict                         as HM
 import qualified Data.Text                                   as Text
 import qualified Text.Pandoc.JSON                            as Pandoc

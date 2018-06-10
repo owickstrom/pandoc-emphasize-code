@@ -23,8 +23,7 @@ spec_mkRanges = do
     rs <- mkRanges' [((1, 1), (1, 7)), ((4, 1), (7, 2)), ((1, 8), (3, 4))]
     map rangeToTuples (rangesToList rs) `shouldBe`
       [((1, 1), (1, 7)), ((1, 8), (3, 4)), ((4, 1), (7, 2))]
-  it "does not accept empty ranges" $
-    mkRanges' [] `shouldThrow` anyException
+  it "does not accept empty ranges" $ mkRanges' [] `shouldThrow` anyException
 
 spec_splitRanges = do
   it "splits one range into line ranges" $ do
@@ -51,4 +50,5 @@ spec_splitRanges = do
             , (10, makeLineRanges [(10, 1, Just 2)])
             ]
     splitRanges rs `shouldBe` lrs
+
 {-# ANN module ("HLint: ignore Use camelCase" :: String) #-}

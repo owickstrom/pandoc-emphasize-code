@@ -1,21 +1,21 @@
 {-# LANGUAGE LambdaCase #-}
+
 module Main where
 
-import System.Environment
+import           System.Environment
 
-import           Text.Pandoc.JSON
 import           Text.Pandoc.Filter.EmphasizeCode
+import           Text.Pandoc.JSON
 
-import Paths_pandoc_emphasize_code
-import qualified Data.Version          as Version
+import qualified Data.Version                     as Version
+import           Paths_pandoc_emphasize_code
 
 main :: IO ()
 main =
-  getArgs >>=
-    \case
-      (arg:_)
-        | arg == "-V" -> showVersion
-        | arg == "--version" -> showVersion
-      _ -> toJSONFilter emphasizeCode
+  getArgs >>= \case
+    (arg:_)
+      | arg == "-V" -> showVersion
+      | arg == "--version" -> showVersion
+    _ -> toJSONFilter emphasizeCode
   where
     showVersion = putStrLn (Version.showVersion version)

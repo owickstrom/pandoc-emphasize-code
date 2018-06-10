@@ -1,6 +1,6 @@
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE CPP               #-}
+{-# LANGUAGE FlexibleContexts  #-}
+{-# LANGUAGE NamedFieldPuns    #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Text.Pandoc.Filter.EmphasizeCode.Parser
@@ -10,13 +10,13 @@ module Text.Pandoc.Filter.EmphasizeCode.Parser
   , runParser
   ) where
 
-import Control.Monad.Except
-import Data.Text (Text)
-import qualified Data.Text as Text
-import Text.Read (readMaybe)
+import           Control.Monad.Except
+import           Data.Text                                 (Text)
+import qualified Data.Text                                 as Text
+import           Text.Read                                 (readMaybe)
 
-import Text.Pandoc.Filter.EmphasizeCode.Position
-import Text.Pandoc.Filter.EmphasizeCode.Range
+import           Text.Pandoc.Filter.EmphasizeCode.Position
+import           Text.Pandoc.Filter.EmphasizeCode.Range
 
 type Parser a = ExceptT ParseError Maybe a
 
@@ -35,14 +35,14 @@ data ParseError
 parseMaybe :: Read a => Text -> (Text -> ParseError) -> Parser a
 parseMaybe t mkError =
   case readMaybe (Text.unpack t) of
-    Just x -> pure x
+    Just x  -> pure x
     Nothing -> throwError (mkError t)
 
 split2 :: MonadError e m => Text -> Text -> (Text -> e) -> m (Text, Text)
 split2 sep t err =
   case Text.splitOn sep t of
     [before, after] -> return (before, after)
-    _ -> throwError (err t)
+    _               -> throwError (err t)
 
 parsePosition :: Text -> Parser Position
 parsePosition t = do
@@ -51,7 +51,7 @@ parsePosition t = do
   col' <- Column <$> parseMaybe col InvalidColumnNumber
   case mkPosition line' col' of
     Just position -> pure position
-    Nothing -> throwError (InvalidPosition line' col')
+    Nothing       -> throwError (InvalidPosition line' col')
 
 parseRange :: Text -> Parser Range
 parseRange t = do
@@ -60,14 +60,14 @@ parseRange t = do
   end <- parsePosition endStr
   case mkRange start end of
     Just range -> pure range
-    Nothing -> throwError (InvalidRange start end)
+    Nothing    -> throwError (InvalidRange start end)
 
 parseRanges :: Text -> Parser Ranges
 parseRanges t = do
   let strs = filter (not . Text.null) (map Text.strip (Text.splitOn "," t))
   rs <- mapM parseRange strs
   case mkRanges rs of
-    Left err -> throwError (InvalidRanges err)
+    Left err     -> throwError (InvalidRanges err)
     Right ranges -> pure ranges
 
 runParser :: Parser a -> Maybe (Either ParseError a)

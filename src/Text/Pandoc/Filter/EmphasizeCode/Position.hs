@@ -11,7 +11,7 @@ module Text.Pandoc.Filter.EmphasizeCode.Position
   , positionToTuple
   ) where
 
-import Data.Hashable
+import           Data.Hashable
 
 newtype Line =
   Line Word

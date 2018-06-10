@@ -1,5 +1,5 @@
 module Text.Pandoc.Filter.EmphasizeCode.Html
-  ( EmphasisTag (..)
+  ( EmphasisTag(..)
   , Html(Html)
   ) where
 
@@ -20,7 +20,7 @@ newtype Html =
   Html EmphasisTag
 
 emphasisElement :: EmphasisTag -> Html.Html () -> Html.Html ()
-emphasisElement Em = Html.em_
+emphasisElement Em   = Html.em_
 emphasisElement Mark = Html.mark_
 
 emphasizeChunkHtml :: EmphasisTag -> LineChunk -> Html.Html ()
