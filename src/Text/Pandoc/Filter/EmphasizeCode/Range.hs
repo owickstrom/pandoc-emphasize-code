@@ -13,11 +13,11 @@ module Text.Pandoc.Filter.EmphasizeCode.Range
   , rangesToList
   , RangesError(..)
   , mkRanges
-  , LineRange
-  , lineRangeLine
-  , lineRangeStart
-  , lineRangeEnd
-  , mkLineRange
+  , SingleLineRange
+  , singleLineRangeLine
+  , singleLineRangeStart
+  , singleLineRangeEnd
+  , mkSingleLineRange
   , splitRanges
   ) where
 #if MIN_VERSION_base(4,8,0)
@@ -86,34 +86,37 @@ mkRanges ranges = do
       return (Just this)
     checkOverlap Nothing this = return (Just this)
 
-data LineRange = LineRange
-  { lineRangeLine  :: Line
-  , lineRangeStart :: Column
-  , lineRangeEnd   :: Maybe Column
+data SingleLineRange = SingleLineRange
+  { singleLineRangeLine  :: Line
+  , singleLineRangeStart :: Column
+  , singleLineRangeEnd   :: Maybe Column
   } deriving (Eq, Show)
 
-mkLineRange :: Line -> Column -> Maybe Column -> Maybe LineRange
-mkLineRange line' start (Just end)
-  | line' > 0 && start < end = Just (LineRange line' start (Just end))
-mkLineRange line' start Nothing
-  | line' > 0 = Just (LineRange line' start Nothing)
-mkLineRange _ _ _ = Nothing
+mkSingleLineRange :: Line -> Column -> Maybe Column -> Maybe SingleLineRange
+mkSingleLineRange line' start (Just end)
+  | line' > 0 && start < end = Just (SingleLineRange line' start (Just end))
+mkSingleLineRange line' start Nothing
+  | line' > 0 = Just (SingleLineRange line' start Nothing)
+mkSingleLineRange _ _ _ = Nothing
 
-rangeToLineRanges :: Range -> [LineRange]
-rangeToLineRanges r@Range {rangeStart = p1, rangeEnd = p2}
-  | line p1 == line p2 = [LineRange (line p1) (column p1) (Just (column p2))]
+rangeToSingleLineRanges :: Range -> [SingleLineRange]
+rangeToSingleLineRanges r@Range {rangeStart = p1, rangeEnd = p2}
+  | line p1 == line p2 =
+    [SingleLineRange (line p1) (column p1) (Just (column p2))]
   | line p2 > line p1 =
-    let startLine = LineRange (line p1) (column p1) Nothing
-        endLine = LineRange (line p2) 1 (Just (column p2))
+    let startLine = SingleLineRange (line p1) (column p1) Nothing
+        endLine = SingleLineRange (line p2) 1 (Just (column p2))
         middleLines =
-          [LineRange n 1 Nothing | n <- [succ (line p1) .. pred (line p2)]]
+          [ SingleLineRange n 1 Nothing
+          | n <- [succ (line p1) .. pred (line p2)]
+          ]
     in startLine : middleLines ++ [endLine]
   | otherwise = error ("'Range' has invalid positions: " ++ show r)
 
-splitRanges :: Ranges -> HashMap Line [LineRange]
+splitRanges :: Ranges -> HashMap Line [SingleLineRange]
 splitRanges ranges =
   HashMap.fromListWith
     (flip (<>))
-    [ (lineRangeLine lr, [lr])
-    | lr <- concatMap rangeToLineRanges (rangesToList ranges)
+    [ (singleLineRangeLine lr, [lr])
+    | lr <- concatMap rangeToSingleLineRanges (rangesToList ranges)
     ]
