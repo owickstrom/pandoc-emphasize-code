@@ -52,6 +52,7 @@ test-suite filter-tests
     hs-source-dirs:  test
     main-is:         Main.hs
     other-modules:   Text.Pandoc.Filter.EmphasizeCodeTest
+                     Text.Pandoc.Filter.EmphasizeCode.ParserTest
                      Text.Pandoc.Filter.EmphasizeCode.RangeTest
                      Text.Pandoc.Filter.EmphasizeCode.ChunkingTest
                      Text.Pandoc.Filter.EmphasizeCode.Testing.Ranges
@@ -63,3 +64,4 @@ test-suite filter-tests
                    , tasty-hunit
                    , tasty-hspec
                    , tasty-discover
+                   , text                 >= 1.2      && < 1.3

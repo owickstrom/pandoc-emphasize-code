@@ -1,7 +1,5 @@
 module Text.Pandoc.Filter.EmphasizeCode.Testing.Ranges where
 
-import           Data.Maybe                                (mapMaybe)
-
 import           Text.Pandoc.Filter.EmphasizeCode.Position
 import           Text.Pandoc.Filter.EmphasizeCode.Range
 
