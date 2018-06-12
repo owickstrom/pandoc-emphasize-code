@@ -14,8 +14,8 @@ singleRangeHtmlMark =
     "html"
     (mconcat
        [ "<pre class=\"my-lang\"><code>hello world\n"
-       , "hej <mark>världen</mark>\n"
-       , "<mark>hallo</mark> welt\n"
+       , "hej <mark class=\"inline\">världen</mark>\n"
+       , "<mark class=\"inline\">hallo</mark> welt\n"
        , "hei verden</code></pre>"
        ])
 
@@ -25,8 +25,8 @@ singleRangeHtmlEm =
     "html"
     (mconcat
        [ "<pre class=\"my-lang\"><code>hello world\n"
-       , "hej <em>världen</em>\n"
-       , "<em>hallo</em> welt\n"
+       , "hej <em class=\"inline\">världen</em>\n"
+       , "<em class=\"inline\">hallo</em> welt\n"
        , "hei verden</code></pre>"
        ])
 
@@ -39,26 +39,26 @@ emphasizeCode format ranges =
        "hello world\nhej världen\nhallo welt\nhei verden")
 
 spec_emphasizeCode = do
-  it "emphasizes HTML and a single range" $
+  it "emphasizes HTML and a single position range" $
     emphasizeCode "html5" "2:5-3:5" `shouldReturn` singleRangeHtmlMark
-  it "emphasizes HTML and a single range over multiple lines" $
+  it "emphasizes HTML and a single position range over multiple lines" $
     emphasizeCode "html5" "2:5-4:3" `shouldReturn`
     RawBlock
       "html"
       (mconcat
          [ "<pre class=\"my-lang\"><code>hello world\n"
-         , "hej <mark>världen</mark>\n"
-         , "<mark>hallo welt</mark>\n"
-         , "<mark>hei</mark> verden</code></pre>"
+         , "hej <mark class=\"inline\">världen</mark>\n"
+         , "<mark class=\"inline\">hallo welt</mark>\n"
+         , "<mark class=\"inline\">hei</mark> verden</code></pre>"
          ])
   it "emphasizes HTML and multiple ranges" $
     emphasizeCode "html5" "1:1-1:5,2:5-3:5" `shouldReturn`
     RawBlock
       "html"
       (mconcat
-         [ "<pre class=\"my-lang\"><code><mark>hello</mark> world\n"
-         , "hej <mark>världen</mark>\n"
-         , "<mark>hallo</mark> welt\n"
+         [ "<pre class=\"my-lang\"><code><mark class=\"inline\">hello</mark> world\n"
+         , "hej <mark class=\"inline\">världen</mark>\n"
+         , "<mark class=\"inline\">hallo</mark> welt\n"
          , "hei verden</code></pre>"
          ])
   it "emphasizes RevealJS HTML using <mark>" $

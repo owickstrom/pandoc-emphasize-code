@@ -19,11 +19,13 @@ module Text.Pandoc.Filter.EmphasizeCode.Range
   , rangesToList
   , RangesError(..)
   , mkRanges
+  , EmphasisStyle(..)
   , SingleLineRange
   , singleLineRangeLine
   , singleLineRangeStart
   , singleLineRangeEnd
-  , mkSingleLineRange
+  , singleLineRangeStyle
+  , mkSingleLineRangeInline
   , splitRanges
   ) where
 #if MIN_VERSION_base(4,8,0)
@@ -132,34 +134,42 @@ mkRanges ranges = do
         else Left (Overlap last' this)
     checkOverlap Nothing this = return (Just this)
 
+data EmphasisStyle
+  = Inline
+  | Block
+  deriving (Eq, Show)
+
 data SingleLineRange = SingleLineRange
   { singleLineRangeLine  :: Line
   , singleLineRangeStart :: Column
   , singleLineRangeEnd   :: Maybe Column
+  , singleLineRangeStyle :: EmphasisStyle
   } deriving (Eq, Show)
 
-mkSingleLineRange :: Line -> Column -> Maybe Column -> Maybe SingleLineRange
-mkSingleLineRange line' start (Just end)
-  | line' > 0 && start < end = Just (SingleLineRange line' start (Just end))
-mkSingleLineRange line' start Nothing
-  | line' > 0 = Just (SingleLineRange line' start Nothing)
-mkSingleLineRange _ _ _ = Nothing
+mkSingleLineRangeInline ::
+     Line -> Column -> Maybe Column -> Maybe SingleLineRange
+mkSingleLineRangeInline line' start (Just end)
+  | line' > 0 && start < end =
+    Just (SingleLineRange line' start (Just end) Inline)
+mkSingleLineRangeInline line' start Nothing
+  | line' > 0 = Just (SingleLineRange line' start Nothing Inline)
+mkSingleLineRangeInline _ _ _ = Nothing
 
 rangeToSingleLineRanges :: Range -> [SingleLineRange]
 rangeToSingleLineRanges (PR pr@(PosRange p1 p2))
   | line p1 == line p2 =
-    [SingleLineRange (line p1) (column p1) (Just (column p2))]
+    [SingleLineRange (line p1) (column p1) (Just (column p2)) Inline]
   | line p2 > line p1 =
-    let startLine = SingleLineRange (line p1) (column p1) Nothing
-        endLine = SingleLineRange (line p2) 1 (Just (column p2))
+    let startLine = SingleLineRange (line p1) (column p1) Nothing Inline
+        endLine = SingleLineRange (line p2) 1 (Just (column p2)) Inline
         middleLines =
-          [ SingleLineRange n 1 Nothing
+          [ SingleLineRange n 1 Nothing Inline
           | n <- [succ (line p1) .. pred (line p2)]
           ]
     in startLine : middleLines ++ [endLine]
   | otherwise = error ("'PosRange' has invalid positions: " ++ show pr)
 rangeToSingleLineRanges (LR (LineRange l1 l2)) =
-  [SingleLineRange n 1 Nothing | n <- [l1 .. l2]]
+  [SingleLineRange n 1 Nothing Block | n <- [l1 .. l2]]
 
 splitRanges :: Ranges -> HashMap Line [SingleLineRange]
 splitRanges ranges =

@@ -34,11 +34,6 @@ spec_disjoint = do
     testDisjoint input False
     testDisjoint (swap input) False
 
-makeSingleLineRanges :: [(Line, Column, Maybe Column)] -> [SingleLineRange]
-makeSingleLineRanges = mapMaybe mkSingleLineRange'
-  where
-    mkSingleLineRange' (line', start, end) = mkSingleLineRange line' start end
-
 spec_mkRanges_PosRange = do
   it "accepts single-position range" $ do
     rs <- mkPosRanges' [((1, 1), (1, 1))]
@@ -76,6 +71,12 @@ spec_mkRanges_Both = do
       , ((5, Nothing), (6, Nothing))
       , ((7, Just 11), (8, Just 22))
       ]
+
+makeSingleLineRanges :: [(Line, Column, Maybe Column)] -> [SingleLineRange]
+makeSingleLineRanges = mapMaybe mkSingleLineRange'
+  where
+    mkSingleLineRange' (line', start, end) =
+      mkSingleLineRangeInline line' start end
 
 -- TODO(jez) Test splitRange on LineRange's, not just PosRange's
 spec_splitRanges = do

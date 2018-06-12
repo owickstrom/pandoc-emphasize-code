@@ -19,12 +19,13 @@ import           Text.Pandoc.Filter.EmphasizeCode.Range
 
 data LineChunk
   = Literal Text
-  | Emphasized Text
+  | Emphasized EmphasisStyle
+               Text
   deriving (Show, Eq)
 
 chunkText :: LineChunk -> Text
-chunkText (Literal t)    = t
-chunkText (Emphasized t) = t
+chunkText (Literal t)      = t
+chunkText (Emphasized _ t) = t
 
 type EmphasizedLine = [LineChunk]
 
@@ -54,10 +55,13 @@ emphasizeRanges ranges contents = zipWith chunkLine (Text.lines contents) [1 ..]
                   newOffset =
                     offset +
                     fromIntegral (Text.length lineText - Text.length rest')
-              in (rest', newOffset, chunks ++ [Literal before, Emphasized emph])
+              in ( rest'
+                 , newOffset
+                 , chunks ++ [Literal before, Emphasized style emph])
             Nothing ->
               ( ""
               , offset + fromIntegral (Text.length lineText)
-              , chunks ++ [Literal before, Emphasized rest])
+              , chunks ++ [Literal before, Emphasized style rest])
       where
         startIndex = fromIntegral (singleLineRangeStart r - 1 - offset)
+        style = singleLineRangeStyle r
