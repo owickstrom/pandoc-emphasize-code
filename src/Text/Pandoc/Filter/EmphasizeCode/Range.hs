@@ -8,7 +8,7 @@ module Text.Pandoc.Filter.EmphasizeCode.Range
   , mkRange
   , rangeToTuple
   , rangeToTuples
-  , lineIntersectsWithRange
+  , disjoint
   , Ranges
   , rangesToList
   , RangesError(..)
@@ -26,7 +26,7 @@ import           Data.Semigroup                            ((<>))
 import           Control.Applicative
 import           Data.Monoid
 #endif
-import           Control.Monad                             (foldM_, when)
+import           Control.Monad                             (foldM_)
 import           Data.HashMap.Strict                       (HashMap)
 import qualified Data.HashMap.Strict                       as HashMap
 import           Data.List                                 (sortOn)
@@ -51,15 +51,11 @@ rangeToTuples r =
   let (p1, p2) = rangeToTuple r
   in (positionToTuple p1, positionToTuple p2)
 
+disjoint :: (Ord a) => a -> a -> a -> a -> Bool
+disjoint s1 e1 s2 e2 = (e1 < s2) || (e2 < s1)
+
 rangesAreDisjoint :: Range -> Range -> Bool
-rangesAreDisjoint (Range s1 e1) (Range s2 e2) =
-  (s1 < s2 && e1 < e2) || (s2 < s1 && e2 < e1)
-
-rangeIntersects :: Range -> Range -> Bool
-rangeIntersects r1 r2 = not (rangesAreDisjoint r1 r2)
-
-lineIntersectsWithRange :: Line -> Range -> Bool
-lineIntersectsWithRange l (Range start end) = line start <= l && line end >= l
+rangesAreDisjoint (Range s1 e1) (Range s2 e2) = disjoint s1 e1 s2 e2
 
 newtype Ranges =
   Ranges [Range]
@@ -81,9 +77,10 @@ mkRanges ranges = do
   foldM_ checkOverlap Nothing sorted
   pure (Ranges sorted)
   where
-    checkOverlap (Just last') this = do
-      when (last' `rangeIntersects` this) $ Left (Overlap last' this)
-      return (Just this)
+    checkOverlap (Just last') this =
+      if last' `rangesAreDisjoint` this
+        then return (Just this)
+        else Left (Overlap last' this)
     checkOverlap Nothing this = return (Just this)
 
 data SingleLineRange = SingleLineRange

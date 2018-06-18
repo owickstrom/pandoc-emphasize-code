@@ -4,11 +4,35 @@ module Text.Pandoc.Filter.EmphasizeCode.RangeTest where
 
 import qualified Data.HashMap.Strict                             as HashMap
 import           Data.Maybe                                      (mapMaybe)
+import           Data.Tuple                                      (swap)
 import           Test.Tasty.Hspec
 
 import           Text.Pandoc.Filter.EmphasizeCode.Position
 import           Text.Pandoc.Filter.EmphasizeCode.Range
 import           Text.Pandoc.Filter.EmphasizeCode.Testing.Ranges
+
+-- Defaulting to Int instead of (Ord a => a) here to avoid ambiguous type vars
+testDisjoint :: ((Int, Int), (Int, Int)) -> Bool -> Expectation
+testDisjoint ((s1, e1), (s2, e2)) expected =
+  disjoint s1 e1 s2 e2 `shouldBe` expected
+
+spec_disjoint = do
+  it "is disjoint when zero ends are contained by the other" $ do
+    let input = ((1, 2), (3, 9))
+    testDisjoint input True
+    testDisjoint (swap input) True
+  it "is not disjoint when one end is contained by the other" $ do
+    let input = ((1, 4), (3, 9))
+    testDisjoint input False
+    testDisjoint (swap input) False
+  it "is not disjoint when one end equals the other (ends are inclusive!)" $ do
+    let input = ((1, 3), (3, 9))
+    testDisjoint input False
+    testDisjoint (swap input) False
+  it "is not disjoint when one range is completely contained by the other" $ do
+    let input = ((1, 9), (3, 7))
+    testDisjoint input False
+    testDisjoint (swap input) False
 
 makeSingleLineRanges :: [(Line, Column, Maybe Column)] -> [SingleLineRange]
 makeSingleLineRanges = mapMaybe mkSingleLineRange'
