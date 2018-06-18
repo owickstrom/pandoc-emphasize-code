@@ -25,7 +25,10 @@ printPosition :: Position -> Text
 printPosition p = printLine (line p) <> ":" <> printColumn (column p)
 
 printRange :: Range -> Text
-printRange r = printPosition (rangeStart r) <> "-" <> printPosition (rangeEnd r)
+printRange (PR pr) =
+  printPosition (posRangeStart pr) <> "-" <> printPosition (posRangeEnd pr)
+printRange (LR lr) =
+  printLine (lineRangeStart lr) <> "-" <> printLine (lineRangeEnd lr)
 
 printRangesError :: RangesError -> Text
 printRangesError err =
@@ -36,10 +39,10 @@ printRangesError err =
 printParseError :: ParseError -> Text
 printParseError err =
   case err of
-    InvalidRange start end ->
+    InvalidPosRange start end ->
       "Invalid range: " <> printPosition start <> " to " <> printPosition end
     InvalidRanges rangesErr -> printRangesError rangesErr
-    InvalidRangeFormat t -> "Invalid range: " <> t
+    InvalidPosRangeFormat t -> "Invalid range: " <> t
     InvalidPosition line' column' ->
       "Invalid position: " <> printLine line' <> " to " <> printColumn column'
     InvalidPositionFormat t -> "Invalid position: " <> t

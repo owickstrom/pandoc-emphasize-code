@@ -6,6 +6,7 @@
 module Text.Pandoc.Filter.EmphasizeCode.Parser
   ( Parser
   , ParseError(..)
+  , parseRange
   , parseRanges
   , runParser
   ) where
@@ -21,10 +22,10 @@ import           Text.Pandoc.Filter.EmphasizeCode.Range
 type Parser a = ExceptT ParseError Maybe a
 
 data ParseError
-  = InvalidRange Position
-                 Position
+  = InvalidPosRange Position
+                    Position
   | InvalidRanges RangesError
-  | InvalidRangeFormat Text
+  | InvalidPosRangeFormat Text
   | InvalidPosition Line
                     Column
   | InvalidPositionFormat Text
@@ -53,14 +54,17 @@ parsePosition t = do
     Just position -> pure position
     Nothing       -> throwError (InvalidPosition line' col')
 
-parseRange :: Text -> Parser Range
-parseRange t = do
-  (startStr, endStr) <- split2 "-" t InvalidRangeFormat
+parsePosRange :: Text -> Parser PosRange
+parsePosRange t = do
+  (startStr, endStr) <- split2 "-" t InvalidPosRangeFormat
   start <- parsePosition startStr
   end <- parsePosition endStr
-  case mkRange start end of
+  case mkPosRange start end of
     Just range -> pure range
-    Nothing    -> throwError (InvalidRange start end)
+    Nothing    -> throwError (InvalidPosRange start end)
+
+parseRange :: Text -> Parser Range
+parseRange t = PR <$> parsePosRange t
 
 parseRanges :: Text -> Parser Ranges
 parseRanges t = do
