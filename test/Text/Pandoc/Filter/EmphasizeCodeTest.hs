@@ -51,12 +51,32 @@ spec_emphasizeCode = do
          , "<mark class=\"inline\">hallo welt</mark>\n"
          , "<mark class=\"inline\">hei</mark> verden</code></pre>"
          ])
+  it "emphasizes HTML and a single line range" $
+    emphasizeCode "html5" "2-3" `shouldReturn`
+    RawBlock
+      "html"
+      (mconcat
+         [ "<pre class=\"my-lang\"><code>hello world\n"
+         , "<mark class=\"block\">hej världen</mark>\n"
+         , "<mark class=\"block\">hallo welt</mark>\n"
+         , "hei verden</code></pre>"
+         ])
   it "emphasizes HTML and multiple ranges" $
     emphasizeCode "html5" "1:1-1:5,2:5-3:5" `shouldReturn`
     RawBlock
       "html"
       (mconcat
          [ "<pre class=\"my-lang\"><code><mark class=\"inline\">hello</mark> world\n"
+         , "hej <mark class=\"inline\">världen</mark>\n"
+         , "<mark class=\"inline\">hallo</mark> welt\n"
+         , "hei verden</code></pre>"
+         ])
+  it "emphasizes HTML and multiple ranges (mixing range types)" $
+    emphasizeCode "html5" "1-1,2:5-3:5" `shouldReturn`
+    RawBlock
+      "html"
+      (mconcat
+         [ "<pre class=\"my-lang\"><code><mark class=\"block\">hello world</mark>\n"
          , "hej <mark class=\"inline\">världen</mark>\n"
          , "<mark class=\"inline\">hallo</mark> welt\n"
          , "hei verden</code></pre>"
