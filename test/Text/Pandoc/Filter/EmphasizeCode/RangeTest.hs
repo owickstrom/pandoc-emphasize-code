@@ -39,15 +39,43 @@ makeSingleLineRanges = mapMaybe mkSingleLineRange'
   where
     mkSingleLineRange' (line', start, end) = mkSingleLineRange line' start end
 
-spec_mkPosRanges = do
+spec_mkRanges_PosRange = do
   it "accepts single-position range" $ do
     rs <- mkPosRanges' [((1, 1), (1, 1))]
     map rangeToTuples (rangesToList rs) `shouldBe` [((1, Just 1), (1, Just 1))]
   it "sorts position ranges" $ do
     rs <- mkPosRanges' [((1, 1), (1, 7)), ((4, 1), (7, 2)), ((1, 8), (3, 4))]
     map rangeToTuples (rangesToList rs) `shouldBe`
-      [ ((1, Just 1), (1, Just 7)) , ((1, Just 8), (3, Just 4)) , ((4, Just 1), (7, Just 2)) ]
-  it "does not accept empty position ranges" $ do mkPosRanges' [] `shouldThrow` anyException
+      [ ((1, Just 1), (1, Just 7))
+      , ((1, Just 8), (3, Just 4))
+      , ((4, Just 1), (7, Just 2))
+      ]
+  it "does not accept empty position ranges" $ do
+    mkPosRanges' [] `shouldThrow` anyException
+
+spec_mkRanges_LineRange = do
+  it "accepts single-line range" $ do
+    rs <- mkLineRanges' [(1, 1)]
+    map rangeToTuples (rangesToList rs) `shouldBe`
+      [((1, Nothing), (1, Nothing))]
+  it "sorts line ranges" $ do
+    rs <- mkLineRanges' [(1, 1), (4, 7), (2, 3)]
+    map rangeToTuples (rangesToList rs) `shouldBe`
+      [ ((1, Nothing), (1, Nothing))
+      , ((2, Nothing), (3, Nothing))
+      , ((4, Nothing), (7, Nothing))
+      ]
+  it "does not accept empty line ranges" $ do
+    mkLineRanges' [] `shouldThrow` anyException
+
+spec_mkRanges_Both = do
+  it "supports mixing and matching position and line ranges" $ do
+    rs <- mkRanges' [((2, 10), (4, 15)), ((7, 11), (8, 22))] [(5, 6)]
+    map rangeToTuples (rangesToList rs) `shouldBe`
+      [ ((2, Just 10), (4, Just 15))
+      , ((5, Nothing), (6, Nothing))
+      , ((7, Just 11), (8, Just 22))
+      ]
 
 -- TODO(jez) Test splitRange on LineRange's, not just PosRange's
 spec_splitRanges = do
