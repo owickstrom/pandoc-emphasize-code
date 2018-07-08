@@ -116,7 +116,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Often when working with code examples in documentation, printed or web hosted, or in presentation slideshows, you might want to emphasize parts of a code snippet.</p>
 <p>You can get away with manually writing the target markup, in LaTeX or raw HTML, but if you want to render the same document in multiple output formats, this gets really tedious. Also, having to write the markup by hand can be error prone.</p>
 <p>This filter lets you specify <em>ranges</em> of a code block to emphasize, and have the filter generate the appropriate markup for you. It recognizes code blocks with the <code>emphasize</code> attribute present:</p>
-<pre><code>```{.haskell <mark class="inline">emphasize=2-2,3:3-3:12}</mark>
+<pre><code>```{.haskell <mark class="inline">emphasize=2-2,3:3-3:12</mark>}
 myFunc = do
   newStuffHere
   andThisToo notThis
@@ -176,13 +176,15 @@ ranges          = range, { (&quot;,&quot;, range) };
 <a class="sourceLine" id="cb5-11" data-line-number="11">  <span class="kw">background-color</span>: <span class="dv">yellow</span>;</a>
 <a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="kw">z-index</span>: <span class="dv">-1</span>;</a>
 <a class="sourceLine" id="cb5-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="co">/* Adjust these sizes to work with your code blocks. */</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15">  <span class="co">/* For example, you can set left &amp; right to be negative */</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16">  <span class="co">/* if you have padding on your code blocks. */</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">  <span class="kw">left</span>: <span class="dv">0</span>;</a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">  <span class="kw">right</span>: <span class="dv">0</span>;</a>
-<a class="sourceLine" id="cb5-19" data-line-number="19">  <span class="kw">height</span>: <span class="dv">1.5rem</span>;</a>
-<a class="sourceLine" id="cb5-20" data-line-number="20">}</a></code></pre></div>
+<a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="co">/**</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">   * Adjust these sizes to work with your code blocks.</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">   * For example, you can set left &amp; right to be negative</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">   * if you have padding on your code blocks.</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">   */</span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19">  <span class="kw">left</span>: <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb5-20" data-line-number="20">  <span class="kw">right</span>: <span class="dv">0</span>;</a>
+<a class="sourceLine" id="cb5-21" data-line-number="21">  <span class="kw">height</span>: <span class="dv">1.5rem</span>;</a>
+<a class="sourceLine" id="cb5-22" data-line-number="22">}</a></code></pre></div>
 <p><strong>NOTE:</strong> There is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc’s highlighter and embed custom HTML tags. You can usually recover language-based syntax highlighting with a JavaScript syntax highlighter running in the browser on page load (for example: <a href="https://highlightjs.org/">highlight.js</a>).</p>
 <h3 id="rendering-with-latex">Rendering with LaTeX</h3>
 <p>When rendering using LaTeX, two things are required:</p>

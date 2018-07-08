@@ -45,7 +45,7 @@ This filter lets you specify *ranges* of a code block to emphasize, and
 have the filter generate the appropriate markup for you. It recognizes
 code blocks with the `emphasize` attribute present:
 
-<pre><code>```{.haskell <em class="inline">emphasize=2-2,3:3-3:12}</em>
+<pre><code>```{.haskell <em class="inline">emphasize=2-2,3:3-3:12</em>}
 myFunc = do
   newStuffHere
   andThisToo notThis
@@ -142,9 +142,11 @@ mark.block::after {
   background-color: yellow;
   z-index: -1;
 
-  /* Adjust these sizes to work with your code blocks. */
-  /* For example, you can set left & right to be negative */
-  /* if you have padding on your code blocks. */
+  /**
+   * Adjust these sizes to work with your code blocks.
+   * For example, you can set left & right to be negative
+   * if you have padding on your code blocks.
+   */
   left: 0;
   right: 0;
   height: 1.5rem;
