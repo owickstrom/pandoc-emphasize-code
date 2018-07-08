@@ -26,7 +26,7 @@ This filter lets you specify *ranges* of a code block to emphasize, and have
 the filter generate the appropriate markup for you. It recognizes code blocks
 with the `emphasize` attribute present:
 
-````{emphasize=1:14-1:40}
+````{emphasize=1:14-1:35}
 ```{.haskell emphasize=2-2,3:3-3:12}
 myFunc = do
   newStuffHere
