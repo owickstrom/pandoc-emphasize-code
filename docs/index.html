@@ -134,7 +134,7 @@ myFunc = do
 column number   = natural number;
 position        = line number, &quot;:&quot;, column number;
 range           = position, &quot;-&quot;, position
-range           | line number, &quot;-&quot;, line number;
+                | line number, &quot;-&quot;, line number;
 ranges          = range, { (&quot;,&quot;, range) };
 
 (* definition of natural number excluded for brevity *)</code></pre>

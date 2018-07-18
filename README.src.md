@@ -58,7 +58,7 @@ line number     = natural number;
 column number   = natural number;
 position        = line number, ":", column number;
 range           = position, "-", position
-range           | line number, "-", line number;
+                | line number, "-", line number;
 ranges          = range, { (",", range) };
 
 (* definition of natural number excluded for brevity *)
