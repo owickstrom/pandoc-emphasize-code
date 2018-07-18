@@ -3,20 +3,6 @@
 
 *A Pandoc filter for emphasizing code in fenced blocks.*
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -   [Usage](#usage)
     -   [Syntax](#syntax)
     -   [Rendering to HTML](#rendering-to-html)

@@ -1,14 +1,6 @@
 ---
 title: pandoc-emphasize-code
 subtitle: A Pandoc filter for emphasizing code in fenced blocks.
-header-includes:
-  - \usepackage{listings}
-  - \usepackage[T1]{fontenc}
-  - \usepackage[default]{sourcesanspro}
-  - \usepackage{sourcecodepro}
-  - \lstset{basicstyle=\ttfamily,columns=fixed,keywordstyle=\sffamily}
-  - \newcommand{\CodeEmphasis}[1]{\textbf{#1}}
-  - \newcommand{\CodeEmphasisLine}[1]{\textbf{#1}}
 ---
 
 ## Usage
