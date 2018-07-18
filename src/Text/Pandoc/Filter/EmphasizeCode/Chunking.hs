@@ -19,18 +19,19 @@ import           Text.Pandoc.Filter.EmphasizeCode.Range
 
 data LineChunk
   = Literal Text
-  | Emphasized Text
+  | Emphasized EmphasisStyle
+               Text
   deriving (Show, Eq)
 
 chunkText :: LineChunk -> Text
-chunkText (Literal t)    = t
-chunkText (Emphasized t) = t
+chunkText (Literal t)      = t
+chunkText (Emphasized _ t) = t
 
 type EmphasizedLine = [LineChunk]
 
 type EmphasizedLines = [EmphasizedLine]
 
-emphasizeRanges :: HashMap Line [LineRange] -> Text -> EmphasizedLines
+emphasizeRanges :: HashMap Line [SingleLineRange] -> Text -> EmphasizedLines
 emphasizeRanges ranges contents = zipWith chunkLine (Text.lines contents) [1 ..]
   where
     chunkLine line' lineNr =
@@ -42,22 +43,25 @@ emphasizeRanges ranges contents = zipWith chunkLine (Text.lines contents) [1 ..]
       in filter (not . Text.null . chunkText) (chunks ++ [Literal rest])
     chunkRange ::
          (Text, Column, EmphasizedLine)
-      -> LineRange
+      -> SingleLineRange
       -> (Text, Column, EmphasizedLine)
     chunkRange (lineText, offset, chunks) r =
       case Text.splitAt startIndex lineText of
         (before, rest) ->
-          case lineRangeEnd r of
+          case singleLineRangeEnd r of
             Just end ->
               let endIndex = fromIntegral (end - offset) - Text.length before
                   (emph, rest') = Text.splitAt endIndex rest
                   newOffset =
                     offset +
                     fromIntegral (Text.length lineText - Text.length rest')
-              in (rest', newOffset, chunks ++ [Literal before, Emphasized emph])
+              in ( rest'
+                 , newOffset
+                 , chunks ++ [Literal before, Emphasized style emph])
             Nothing ->
               ( ""
               , offset + fromIntegral (Text.length lineText)
-              , chunks ++ [Literal before, Emphasized rest])
+              , chunks ++ [Literal before, Emphasized style rest])
       where
-        startIndex = fromIntegral (lineRangeStart r - 1 - offset)
+        startIndex = fromIntegral (singleLineRangeStart r - 1 - offset)
+        style = singleLineRangeStyle r

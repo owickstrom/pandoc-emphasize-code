@@ -4,7 +4,9 @@
 module Text.Pandoc.Filter.EmphasizeCode
   ( emphasizeCode
   ) where
+
 import qualified Data.HashMap.Strict                         as HM
+import           Data.List.NonEmpty
 import qualified Data.Text                                   as Text
 import qualified Text.Pandoc.JSON                            as Pandoc
 
@@ -16,8 +18,9 @@ import           Text.Pandoc.Filter.EmphasizeCode.Pretty
 import           Text.Pandoc.Filter.EmphasizeCode.Range
 import           Text.Pandoc.Filter.EmphasizeCode.Renderable
 
-printAndFail :: ParseError -> IO a
-printAndFail = fail . Text.unpack . printParseError
+printAndFail :: NonEmpty ParseError -> IO a
+printAndFail (err :| []) = fail . Text.unpack . printParseError $ err
+printAndFail errs        = fail . Text.unpack . printParseErrors $ errs
 
 toRenderer ::
      Pandoc.Format -> Maybe (Pandoc.Attr -> EmphasizedLines -> Pandoc.Block)

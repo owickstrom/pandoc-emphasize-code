@@ -69,6 +69,31 @@ pre code {
   line-height: inherit;
 }
 
+pre > code {
+  position: relative;
+  display: inline-block;
+  min-width: 100%;
+  z-index: 1;
+}
+
+mark.inline {
+  /* So that inline marks are the same height as block marks. */
+  padding: 2px;
+  margin: 0 -2px;
+}
+
+mark.block::after {
+  /* These apply to anyone who wants entire-line highlighting. */
+  content: "";
+  position: absolute;
+  background-color: yellow;
+  z-index: -1;
+  /* These sizes should be changed to work with your code blocks. */
+  left: -1rem;
+  right: -1rem;
+  height: 1.5rem;
+}
+
 pre:before {
   display: block;
   content: attr(caption);

@@ -29,6 +29,7 @@ library
                      Text.Pandoc.Filter.EmphasizeCode.Renderable
     build-depends:   base                 >= 4        && < 5
                    , unordered-containers >= 0.2      && < 0.3
+                   , semigroups
                    , process
                    , hashable             >= 1.2      && < 2
                    , filepath
@@ -52,6 +53,7 @@ test-suite filter-tests
     hs-source-dirs:  test
     main-is:         Main.hs
     other-modules:   Text.Pandoc.Filter.EmphasizeCodeTest
+                     Text.Pandoc.Filter.EmphasizeCode.ParserTest
                      Text.Pandoc.Filter.EmphasizeCode.RangeTest
                      Text.Pandoc.Filter.EmphasizeCode.ChunkingTest
                      Text.Pandoc.Filter.EmphasizeCode.Testing.Ranges
@@ -63,3 +65,4 @@ test-suite filter-tests
                    , tasty-hunit
                    , tasty-hspec
                    , tasty-discover
+                   , text                 >= 1.2      && < 1.3

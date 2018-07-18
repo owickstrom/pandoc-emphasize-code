@@ -1,16 +1,19 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Text.Pandoc.Filter.EmphasizeCode.Html
-  ( EmphasisTag (..)
+  ( EmphasisTag(..)
   , Html(Html)
   ) where
 
-import           Data.List                                   (intersperse)
-import qualified Data.Text                                   as Text
-import qualified Data.Text.Lazy                              as TextLazy
-import qualified Lucid                                       as Html
-import qualified Text.Pandoc.Definition                      as Pandoc
+import Data.List (intersperse)
+import qualified Data.Text as Text
+import qualified Data.Text.Lazy as TextLazy
+import qualified Lucid as Html
+import qualified Text.Pandoc.Definition as Pandoc
 
-import           Text.Pandoc.Filter.EmphasizeCode.Chunking
-import           Text.Pandoc.Filter.EmphasizeCode.Renderable
+import Text.Pandoc.Filter.EmphasizeCode.Chunking
+import Text.Pandoc.Filter.EmphasizeCode.Range
+import Text.Pandoc.Filter.EmphasizeCode.Renderable
 
 data EmphasisTag
   = Em
@@ -19,15 +22,20 @@ data EmphasisTag
 newtype Html =
   Html EmphasisTag
 
-emphasisElement :: EmphasisTag -> Html.Html () -> Html.Html ()
+styleClass :: EmphasisStyle -> Html.Attribute
+styleClass Inline = Html.class_ "inline"
+styleClass Block = Html.class_ "block"
+
+emphasisElement ::
+     EmphasisTag -> [Html.Attribute] -> Html.Html () -> Html.Html ()
 emphasisElement Em = Html.em_
 emphasisElement Mark = Html.mark_
 
 emphasizeChunkHtml :: EmphasisTag -> LineChunk -> Html.Html ()
 emphasizeChunkHtml tag chunk =
   case chunk of
-    Literal t    -> Html.toHtml t
-    Emphasized t -> emphasisElement tag (Html.toHtml t)
+    Literal t -> Html.toHtml t
+    Emphasized style t -> emphasisElement tag [styleClass style] (Html.toHtml t)
 
 instance Renderable Html where
   renderEmphasized (Html tag) (_, classes, _) lines' =
@@ -44,5 +52,5 @@ instance Renderable Html where
         Html.code_ $
         mconcat
           (intersperse
-             (Html.toHtmlRaw "\n")
+             (Html.toHtmlRaw ("\n" :: Text.Text))
              (map (foldMap (emphasizeChunkHtml tag)) lines'))

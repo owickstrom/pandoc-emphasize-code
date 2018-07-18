@@ -1,6 +1,6 @@
 module Text.Pandoc.Filter.EmphasizeCode.Renderable where
 
-import           qualified Text.Pandoc.JSON as Pandoc
+import qualified Text.Pandoc.JSON                          as Pandoc
 
 import           Text.Pandoc.Filter.EmphasizeCode.Chunking
 

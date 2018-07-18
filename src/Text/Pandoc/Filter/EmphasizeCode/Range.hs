@@ -2,22 +2,30 @@
 
 -- | Ranges that cannot be constructed with incorrect bounds.
 module Text.Pandoc.Filter.EmphasizeCode.Range
-  ( Range
-  , rangeStart
-  , rangeEnd
-  , mkRange
-  , rangeToTuple
+  ( PosRange
+  , mkPosRange
+  , posRangeStart
+  , posRangeEnd
+  , posRangeToTuple
+  , LineRange
+  , mkLineRange
+  , lineRangeStart
+  , lineRangeEnd
+  , lineRangeToTuple
+  , Range(..)
   , rangeToTuples
-  , lineIntersectsWithRange
+  , disjoint
   , Ranges
   , rangesToList
   , RangesError(..)
   , mkRanges
-  , LineRange
-  , lineRangeLine
-  , lineRangeStart
-  , lineRangeEnd
-  , mkLineRange
+  , EmphasisStyle(..)
+  , SingleLineRange
+  , singleLineRangeLine
+  , singleLineRangeStart
+  , singleLineRangeEnd
+  , singleLineRangeStyle
+  , mkSingleLineRangeInline
   , splitRanges
   ) where
 #if MIN_VERSION_base(4,8,0)
@@ -26,40 +34,71 @@ import           Data.Semigroup                            ((<>))
 import           Control.Applicative
 import           Data.Monoid
 #endif
-import           Control.Monad                             (foldM_, when)
+import           Control.Monad                             (foldM_)
 import           Data.HashMap.Strict                       (HashMap)
 import qualified Data.HashMap.Strict                       as HashMap
 import           Data.List                                 (sortOn)
 
 import           Text.Pandoc.Filter.EmphasizeCode.Position
 
-data Range = Range
-  { rangeStart :: Position
-  , rangeEnd   :: Position
+data PosRange = PosRange
+  { posRangeStart :: Position
+  , posRangeEnd   :: Position
   } deriving (Eq, Show)
 
-mkRange :: Position -> Position -> Maybe Range
-mkRange s e
-  | s <= e = Just (Range s e)
+mkPosRange :: Position -> Position -> Maybe PosRange
+mkPosRange s e
+  | s <= e = Just (PosRange s e)
   | otherwise = Nothing
 
-rangeToTuple :: Range -> (Position, Position)
-rangeToTuple (Range p1 p2) = (p1, p2)
+posRangeToTuple :: PosRange -> (Position, Position)
+posRangeToTuple (PosRange p1 p2) = (p1, p2)
 
-rangeToTuples :: Range -> ((Line, Column), (Line, Column))
-rangeToTuples r =
-  let (p1, p2) = rangeToTuple r
-  in (positionToTuple p1, positionToTuple p2)
+data LineRange = LineRange
+  { lineRangeStart :: Line
+  , lineRangeEnd   :: Line
+  } deriving (Eq, Show)
+
+mkLineRange :: Line -> Line -> Maybe LineRange
+mkLineRange s e
+  | s == 0 || e == 0 = Nothing
+  | s <= e = Just (LineRange s e)
+  | otherwise = Nothing
+
+lineRangeToTuple :: LineRange -> (Line, Line)
+lineRangeToTuple (LineRange l1 l2) = (l1, l2)
+
+data Range
+  = PR PosRange
+  | LR LineRange
+  deriving (Eq, Show)
+
+wrapSndJust :: (a, b) -> (a, Maybe b)
+wrapSndJust (x, y) = (x, Just y)
+
+rangeToTuples :: Range -> ((Line, Maybe Column), (Line, Maybe Column))
+rangeToTuples (PR pr) =
+  let (p1, p2) = posRangeToTuple pr
+  in (wrapSndJust $ positionToTuple p1, wrapSndJust $ positionToTuple p2)
+rangeToTuples (LR lr) =
+  let (l1, l2) = lineRangeToTuple lr
+  in ((l1, Nothing), (l2, Nothing))
+
+disjoint :: (Ord a) => a -> a -> a -> a -> Bool
+disjoint s1 e1 s2 e2 = (e1 < s2) || (e2 < s1)
 
 rangesAreDisjoint :: Range -> Range -> Bool
-rangesAreDisjoint (Range s1 e1) (Range s2 e2) =
-  (s1 < s2 && e1 < e2) || (s2 < s1 && e2 < e1)
-
-rangeIntersects :: Range -> Range -> Bool
-rangeIntersects r1 r2 = not (rangesAreDisjoint r1 r2)
-
-lineIntersectsWithRange :: Line -> Range -> Bool
-lineIntersectsWithRange l (Range start end) = line start <= l && line end >= l
+rangesAreDisjoint (PR (PosRange s1 e1)) (PR (PosRange s2 e2)) =
+  disjoint s1 e1 s2 e2
+rangesAreDisjoint (LR (LineRange s1 e1)) (LR (LineRange s2 e2)) =
+  disjoint s1 e1 s2 e2
+rangesAreDisjoint (LR (LineRange s1 e1)) (PR (PosRange s2 e2)) =
+  let (s2l, _) = positionToTuple s2
+      (e2l, _) = positionToTuple e2
+  in disjoint s1 e1 s2l e2l
+rangesAreDisjoint (PR pw) (LR lw)
+  -- Flipping argument order doesn't affect whether the ranges are disjoint
+ = rangesAreDisjoint (LR lw) (PR pw)
 
 newtype Ranges =
   Ranges [Range]
@@ -74,46 +113,68 @@ data RangesError
             Range
   deriving (Show, Eq)
 
+rangeStartPos :: Range -> Position
+rangeStartPos (PR (PosRange s _)) = s
+rangeStartPos (LR (LineRange s _)) =
+  case mkPosition s 1 of
+    Just sp -> sp
+    -- Impossible: s is a valid line (mkLineRange) and 1 is a valid column
+    Nothing -> error "rangeStartPos: failed to meet mkPosition invariant!"
+
 mkRanges :: [Range] -> Either RangesError Ranges
 mkRanges [] = Left EmptyRanges
 mkRanges ranges = do
-  let sorted = sortOn rangeStart ranges
+  let sorted = sortOn rangeStartPos ranges
   foldM_ checkOverlap Nothing sorted
   pure (Ranges sorted)
   where
-    checkOverlap (Just last') this = do
-      when (last' `rangeIntersects` this) $ Left (Overlap last' this)
-      return (Just this)
+    checkOverlap (Just last') this =
+      if last' `rangesAreDisjoint` this
+        then return (Just this)
+        else Left (Overlap last' this)
     checkOverlap Nothing this = return (Just this)
 
-data LineRange = LineRange
-  { lineRangeLine  :: Line
-  , lineRangeStart :: Column
-  , lineRangeEnd   :: Maybe Column
+data EmphasisStyle
+  = Inline
+  | Block
+  deriving (Eq, Show)
+
+data SingleLineRange = SingleLineRange
+  { singleLineRangeLine  :: Line
+  , singleLineRangeStart :: Column
+  , singleLineRangeEnd   :: Maybe Column
+  , singleLineRangeStyle :: EmphasisStyle
   } deriving (Eq, Show)
 
-mkLineRange :: Line -> Column -> Maybe Column -> Maybe LineRange
-mkLineRange line' start (Just end)
-  | line' > 0 && start < end = Just (LineRange line' start (Just end))
-mkLineRange line' start Nothing
-  | line' > 0 = Just (LineRange line' start Nothing)
-mkLineRange _ _ _ = Nothing
+mkSingleLineRangeInline ::
+     Line -> Column -> Maybe Column -> Maybe SingleLineRange
+mkSingleLineRangeInline line' start (Just end)
+  | line' > 0 && start < end =
+    Just (SingleLineRange line' start (Just end) Inline)
+mkSingleLineRangeInline line' start Nothing
+  | line' > 0 = Just (SingleLineRange line' start Nothing Inline)
+mkSingleLineRangeInline _ _ _ = Nothing
 
-rangeToLineRanges :: Range -> [LineRange]
-rangeToLineRanges r@Range {rangeStart = p1, rangeEnd = p2}
-  | line p1 == line p2 = [LineRange (line p1) (column p1) (Just (column p2))]
+rangeToSingleLineRanges :: Range -> [SingleLineRange]
+rangeToSingleLineRanges (PR pr@(PosRange p1 p2))
+  | line p1 == line p2 =
+    [SingleLineRange (line p1) (column p1) (Just (column p2)) Inline]
   | line p2 > line p1 =
-    let startLine = LineRange (line p1) (column p1) Nothing
-        endLine = LineRange (line p2) 1 (Just (column p2))
+    let startLine = SingleLineRange (line p1) (column p1) Nothing Inline
+        endLine = SingleLineRange (line p2) 1 (Just (column p2)) Inline
         middleLines =
-          [LineRange n 1 Nothing | n <- [succ (line p1) .. pred (line p2)]]
+          [ SingleLineRange n 1 Nothing Inline
+          | n <- [succ (line p1) .. pred (line p2)]
+          ]
     in startLine : middleLines ++ [endLine]
-  | otherwise = error ("'Range' has invalid positions: " ++ show r)
+  | otherwise = error ("'PosRange' has invalid positions: " ++ show pr)
+rangeToSingleLineRanges (LR (LineRange l1 l2)) =
+  [SingleLineRange n 1 Nothing Block | n <- [l1 .. l2]]
 
-splitRanges :: Ranges -> HashMap Line [LineRange]
+splitRanges :: Ranges -> HashMap Line [SingleLineRange]
 splitRanges ranges =
   HashMap.fromListWith
     (flip (<>))
-    [ (lineRangeLine lr, [lr])
-    | lr <- concatMap rangeToLineRanges (rangesToList ranges)
+    [ (singleLineRangeLine lr, [lr])
+    | lr <- concatMap rangeToSingleLineRanges (rangesToList ranges)
     ]

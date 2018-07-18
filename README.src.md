@@ -8,6 +8,7 @@ header-includes:
   - \usepackage{sourcecodepro}
   - \lstset{basicstyle=\ttfamily,columns=fixed,keywordstyle=\sffamily}
   - \newcommand{\CodeEmphasis}[1]{\textbf{#1}}
+  - \newcommand{\CodeEmphasisLine}[1]{\textbf{#1}}
 ---
 
 ## Usage
@@ -25,8 +26,8 @@ This filter lets you specify *ranges* of a code block to emphasize, and have
 the filter generate the appropriate markup for you. It recognizes code blocks
 with the `emphasize` attribute present:
 
-````{emphasize=1:14-1:40}
-```{.haskell emphasize=2:3-2:14,3:3-3:12}
+````{emphasize=1:14-1:35}
+```{.haskell emphasize=2-2,3:3-3:12}
 myFunc = do
   newStuffHere
   andThisToo notThis
@@ -34,8 +35,15 @@ myFunc = do
 ```
 ````
 
-In the example above, the identifier `newStuffHere` and `andThisToo` will be
-emphasized.
+The rendered output looks like this (if you're on GitHub, see the [rendered
+output](https://owickstrom.github.io/pandoc-emphasize-code/) online):
+
+```{.haskell emphasize=2-2,3:3-3:12}
+myFunc = do
+  newStuffHere
+  andThisToo notThis
+  notSoRelevant
+```
 
 Currently, the following output formats are supported:
 
@@ -47,8 +55,9 @@ Currently, the following output formats are supported:
 ### Syntax
 
 The value of the `emphasize` attribute is a comma-separated list of *ranges*.
-A *range* consists of two positions, separated by a dash. A *position* consists
-of a *line number* and a *column number*, separated by a colon.
+A *range* consists of either two positions or two line numbers, separated by a
+dash. A *position* consists of a *line number* and a *column number*, separated
+by a colon.
 
 The syntax can be described in EBNF, like so:
 
@@ -56,14 +65,16 @@ The syntax can be described in EBNF, like so:
 line number     = natural number;
 column number   = natural number;
 position        = line number, ":", column number;
-range           = position, "-", position;
+range           = position, "-", position
+range           | line number, "-", line number;
 ranges          = range, { (",", range) };
 
 (* definition of natural number excluded for brevity *)
 ```
 
 There must be at least one range in the comma-separated list. A range can
-span multiple lines.
+span multiple lines. For ranges composed of line numbers, the start and end
+columns are assumed to be the first and last column on that line.
 
 ### Rendering to HTML
 
@@ -72,8 +83,8 @@ for readability):
 
 ``` html
 <pre class="haskell"><code>myFunc = do
-  <mark>newStuffHere</mark>
-  <mark>andThisToo</mark> notThis
+<mark class="block">  newStuffHere</mark>
+  <mark class="inline">andThisToo</mark> notThis
   notSoRelevant</code></pre>
 ```
 
@@ -99,18 +110,47 @@ code em {
 }
 ```
 
+If you want to achieve the same "entire line" highlighting effect seen in the
+above examples, you'll also want to add these styles:
+
+``` css
+pre > code {
+  position: relative;
+  display: inline-block;
+  min-width: 100%;
+  z-index: 1;
+}
+
+mark.block::after {
+  content: "";
+  position: absolute;
+  background-color: yellow;
+  z-index: -1;
+
+  /**
+   * Adjust these sizes to work with your code blocks.
+   * For example, you can set left & right to be negative
+   * if you have padding on your code blocks.
+   */
+  left: 0;
+  right: 0;
+  height: 1.5rem;
+}
+```
+
 **NOTE:** There is no additional syntax highlighting when emphasizing code and
 rendering to HTML, as there is no way to use Pandoc's highlighter and embed
-custom HTML tags. You might be able to add that using a Javascript highlighter
-running on the client.
+custom HTML tags. You can usually recover language-based syntax highlighting
+with a JavaScript syntax highlighter running in the browser on page load (for
+example: [highlight.js](https://highlightjs.org/)).
 
 ### Rendering with LaTeX
 
 When rendering using LaTeX, two things are required:
 
 * The `listings` package needs to be included.
-* You need to define a `CodeEmphasis` command, styling the emphasized code in
-  `lstlisting`s.
+* You need to define a `CodeEmphasis` and `CodeEmphasisLine` command, styling
+  the emphasized code in `lstlisting`s.
 
 If you're not using a custom LaTeX template, you can use the YAML front matter
 in a Markdown source file to add the requirements:
@@ -120,6 +160,7 @@ header-includes:
   - \usepackage{listings}
   - \lstset{basicstyle=\ttfamily}
   - \newcommand{\CodeEmphasis}[1]{\textcolor{red}{\textit{#1}}}
+  - \newcommand{\CodeEmphasisLine}[1]{\textcolor{red}{\textit{#1}}}
 ```
 
 **NOTE:** When rendering as Beamer slides, any frame including an emphasized
