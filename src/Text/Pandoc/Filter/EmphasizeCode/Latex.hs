@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP               #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Text.Pandoc.Filter.EmphasizeCode.Latex
@@ -11,6 +12,7 @@ import           Control.Applicative
 import           Data.Monoid
 #endif
 import           Data.Char                                   (isSpace)
+import           Data.Text                                   (Text)
 import qualified Data.Text                                   as Text
 import qualified Text.Pandoc.Definition                      as Pandoc
 
@@ -20,6 +22,24 @@ import           Text.Pandoc.Filter.EmphasizeCode.Renderable
 
 data Latex =
   Latex
+
+escaped :: Char -> Text
+escaped = \case
+  '\\' -> "\\textbackslash{}"
+  '#' -> "\\#"
+  '&' -> "\\&"
+  '{' -> "\\{"
+  '}' -> "\\}"
+  '$' -> "\\$"
+  '_' -> "\\_"
+  '%' -> "\\%"
+  '¶' -> "\\P"
+  '§' -> "\\S"
+  '£' -> "\\£"
+  '\'' -> "\\textquotesingle{}"
+  '<' -> "\\textless{}"
+  '>' -> "\\textgreater{}"
+  c -> Text.singleton c
 
 instance Renderable Latex where
   renderEmphasized _ (_, classes, _) lines' =
@@ -50,7 +70,7 @@ instance Renderable Latex where
       emphasizeChunk chunk =
         case chunk of
           Literal t          -> t
-          Emphasized style t -> emphasizeNonSpace style t
+          Emphasized style t -> emphasizeNonSpace style (Text.concatMap escaped t)
       emphasized = Text.unlines (map (foldMap emphasizeChunk) lines')
       encloseInVerbatim t =
         mconcat
