@@ -10,10 +10,11 @@ README.md: README.src.md docs/template.md Makefile
 		-o $@ \
 		$<
 
-docs/pandoc-emphasize-code.pdf: README.src.md Makefile
+docs/pandoc-emphasize-code.pdf: README.src.md docs/header.tex Makefile
 	mkdir -p docs
 	stack exec pandoc -- \
 		-t latex \
+		-H docs/header.tex \
 		--toc \
 		--filter pandoc-emphasize-code \
 		-o $@ \
