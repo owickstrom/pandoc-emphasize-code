@@ -237,6 +237,9 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 
 ## Changelog
 
+- **0.2.4**
+    - Allow full lines to specified, without any column information
+    - Escape special LaTeX characters in emphasized code chunks
 - **0.2.3**
     - Allow single-position range, i.e. one where the start and end is the same
       position, which is needed to emphasize a single character.
@@ -260,5 +263,7 @@ pandoc --filter pandoc-emphasize-code input.md output.html
     - Rendering support for HTML, Markdown, and LaTeX
 
 ## License
+
+Copyright 2017 Oskar Wickström
 
 [Mozilla Public License Version 2.0](LICENSE)

@@ -5,7 +5,7 @@ README.md: README.src.md docs/template.md Makefile
 		-s \
 		--toc \
 		--template docs/template.md \
-		-t markdown_github \
+		-t gfm \
 		--filter pandoc-emphasize-code \
 		-o $@ \
 		$<
