@@ -234,31 +234,38 @@ myFunc = do
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="bu">cd</span> pandoc-emphasize-code</a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="ex">stack</span> setup</a>
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="ex">stack</span> install</a></code></pre></div>
+<p>To build the example in <code>README.src.md</code>, make sure you have on your <code>PATH</code>:</p>
+<ul>
+<li><code>pandoc</code> (<code>stack build pandoc</code>)</li>
+<li><code>pdflatex</code> (can be obtained from a <a href="https://ctan.org/starter">Tex distribution</a>, on macOS <code>brew cask install mactex</code> then add <code>/Library/TeX/texbin</code> to your <code>PATH</code>)</li>
+</ul>
+<p>Then run:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="fu">make</span></a></code></pre></div>
 <h2 id="run">Run</h2>
 <p>If you have installed from sources, and you have <code>~/.local/bin</code> on your <code>PATH</code>, you can use the filter with Pandoc like so:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ex">pandoc</span> --filter pandoc-emphasize-code input.md output.html</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ex">pandoc</span> --filter pandoc-emphasize-code input.md output.html</a></code></pre></div>
 <h2 id="usage-with-hakyll">Usage with Hakyll</h2>
 <p>If you are using the <a href="https://jaspervdj.be/hakyll/">Hakyll</a> static site generator, you can use the filter by importing it as a library and using the snippet below.</p>
 <p>Add <code>pandoc</code>, <code>pandoc-types</code>, and <code>pandoc-emphasize-code</code> to your project dependencies, then define a custom Hakyll compiler using a Pandoc transform:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Text.Pandoc</span> (<span class="dt">Format</span> (..), <span class="dt">Pandoc</span>)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Text.Pandoc.Walk</span> (walkM)</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Text.Pandoc.Filter.EmphasizeCode</span> (emphasizeCode)</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="ot">emphasizeCodeTransform ::</span> <span class="dt">Pandoc</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Pandoc</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">emphasizeCodeTransform <span class="fu">=</span> walkM (emphasizeCode (<span class="dt">Just</span> (<span class="dt">Format</span> <span class="st">&quot;html5&quot;</span>)))</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="ot">emphasizeCodePandocCompiler ::</span> <span class="dt">Compiler</span> (<span class="dt">Item</span> <span class="dt">String</span>)</a>
-<a class="sourceLine" id="cb13-9" data-line-number="9">emphasizeCodePandocCompiler <span class="fu">=</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10">  pandocCompilerWithTransformM</a>
-<a class="sourceLine" id="cb13-11" data-line-number="11">    defaultHakyllReaderOptions</a>
-<a class="sourceLine" id="cb13-12" data-line-number="12">    defaultHakyllWriterOptions {writerHighlightStyle <span class="fu">=</span> <span class="dt">Nothing</span>}</a>
-<a class="sourceLine" id="cb13-13" data-line-number="13">    (unsafeCompiler <span class="fu">.</span> emphasizeCodeTransform)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Text.Pandoc</span> (<span class="dt">Format</span> (..), <span class="dt">Pandoc</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Text.Pandoc.Walk</span> (walkM)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Text.Pandoc.Filter.EmphasizeCode</span> (emphasizeCode)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="ot">emphasizeCodeTransform ::</span> <span class="dt">Pandoc</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Pandoc</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">emphasizeCodeTransform <span class="fu">=</span> walkM (emphasizeCode (<span class="dt">Just</span> (<span class="dt">Format</span> <span class="st">&quot;html5&quot;</span>)))</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="ot">emphasizeCodePandocCompiler ::</span> <span class="dt">Compiler</span> (<span class="dt">Item</span> <span class="dt">String</span>)</a>
+<a class="sourceLine" id="cb14-9" data-line-number="9">emphasizeCodePandocCompiler <span class="fu">=</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10">  pandocCompilerWithTransformM</a>
+<a class="sourceLine" id="cb14-11" data-line-number="11">    defaultHakyllReaderOptions</a>
+<a class="sourceLine" id="cb14-12" data-line-number="12">    defaultHakyllWriterOptions {writerHighlightStyle <span class="fu">=</span> <span class="dt">Nothing</span>}</a>
+<a class="sourceLine" id="cb14-13" data-line-number="13">    (unsafeCompiler <span class="fu">.</span> emphasizeCodeTransform)</a></code></pre></div>
 <p>You can now use <code>emphasizeCodePandocCompiler</code> instead of the default <code>pandocCompiler</code> in your Hakyll rules:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" data-line-number="1">match <span class="st">&quot;*.md&quot;</span> <span class="fu">$</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">  route <span class="fu">$</span> setExtension <span class="st">&quot;html&quot;</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">  compile <span class="fu">$</span> emphasizeCodePandocCompiler</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">    <span class="fu">&gt;&gt;=</span> loadAndApplyTemplate <span class="st">&quot;templates/default.html&quot;</span> defaultContext</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">    <span class="fu">&gt;&gt;=</span> relativizeUrls</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" data-line-number="1">match <span class="st">&quot;*.md&quot;</span> <span class="fu">$</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">  route <span class="fu">$</span> setExtension <span class="st">&quot;html&quot;</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  compile <span class="fu">$</span> emphasizeCodePandocCompiler</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">    <span class="fu">&gt;&gt;=</span> loadAndApplyTemplate <span class="st">&quot;templates/default.html&quot;</span> defaultContext</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">    <span class="fu">&gt;&gt;=</span> relativizeUrls</a></code></pre></div>
 <h2 id="changelog">Changelog</h2>
 <ul>
 <li><strong>0.2.4</strong>

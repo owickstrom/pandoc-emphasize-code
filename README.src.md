@@ -226,6 +226,17 @@ stack setup
 stack install
 ```
 
+To build the example in `README.src.md`, make sure you have on your `PATH`:
+
+- `pandoc` (`stack build pandoc`)
+- `pdflatex` (can be obtained from a [Tex distribution](https://ctan.org/starter), on macOS `brew cask install mactex` then add `/Library/TeX/texbin` to your `PATH`)
+
+Then run:
+
+``` sh
+make
+```
+
 ## Run
 
 If you have installed from sources, and you have `~/.local/bin` on your
