@@ -9,12 +9,13 @@
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
       span.underline{text-decoration: underline;}
+      div.line-block{white-space: pre-line;}
       div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
   <style type="text/css">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -27,11 +28,13 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -74,9 +77,9 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i|Fira+Mono:400|Oswald:400,600" />
-  <link rel="stylesheet" href="docs.css" />
-  <link rel="stylesheet" href="syntax-highlighting.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i|Fira+Mono:400|Oswald:400,600">
+  <link rel="stylesheet" href="docs.css">
+  <link rel="stylesheet" href="syntax-highlighting.css">
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -99,6 +102,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><a href="#build">Build</a></li>
 <li><a href="#run">Run</a></li>
+<li><a href="#usage-with-hakyll">Usage with Hakyll</a></li>
 <li><a href="#changelog">Changelog</a></li>
 <li><a href="#license">License</a></li>
 </ul>
@@ -192,12 +196,12 @@ ranges          = range, { (&quot;,&quot;, range) };
 <p><strong>NOTE:</strong> When rendering as Beamer slides, any frame including an emphasized block must be marked as <code>fragile</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode markdown"><code class="sourceCode markdown"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">## My Slide {.fragile}</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="bn">```{.haskell emphasize=2:3-2:14,3:3-3:12}</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="bn">myFunc = do</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="bn">  newStuffHere</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="bn">  andThisToo notThis</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="bn">  notSoRelevant</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="bn">```</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-3" data-line-number="3">```{.haskell emphasize=2:3-2:14,3:3-3:12}</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">myFunc = do</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">  newStuffHere</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">  andThisToo notThis</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">  notSoRelevant</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">```</a></code></pre></div>
 <h3 id="regular-highlighting">Regular Highlighting</h3>
 <p>You can still use regular Pandoc highlighting (the <em>skylighting</em> library):</p>
 <pre><code>``` {.haskell}
@@ -230,9 +234,38 @@ myFunc = do
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="bu">cd</span> pandoc-emphasize-code</a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="ex">stack</span> setup</a>
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="ex">stack</span> install</a></code></pre></div>
+<p>To build the example in <code>README.src.md</code>, make sure you have on your <code>PATH</code>:</p>
+<ul>
+<li><code>pandoc</code> (<code>stack build pandoc</code>)</li>
+<li><code>pdflatex</code> (can be obtained from a <a href="https://ctan.org/starter">Tex distribution</a>, on macOS <code>brew cask install mactex</code> then add <code>/Library/TeX/texbin</code> to your <code>PATH</code>)</li>
+</ul>
+<p>Then run:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="fu">make</span></a></code></pre></div>
 <h2 id="run">Run</h2>
 <p>If you have installed from sources, and you have <code>~/.local/bin</code> on your <code>PATH</code>, you can use the filter with Pandoc like so:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ex">pandoc</span> --filter pandoc-emphasize-code input.md output.html</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ex">pandoc</span> --filter pandoc-emphasize-code input.md output.html</a></code></pre></div>
+<h2 id="usage-with-hakyll">Usage with Hakyll</h2>
+<p>If you are using the <a href="https://jaspervdj.be/hakyll/">Hakyll</a> static site generator, you can use the filter by importing it as a library and using the snippet below.</p>
+<p>Add <code>pandoc</code>, <code>pandoc-types</code>, and <code>pandoc-emphasize-code</code> to your project dependencies, then define a custom Hakyll compiler using a Pandoc transform:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">import</span> <span class="dt">Text.Pandoc</span> (<span class="dt">Format</span> (..), <span class="dt">Pandoc</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">import</span> <span class="dt">Text.Pandoc.Walk</span> (walkM)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Text.Pandoc.Filter.EmphasizeCode</span> (emphasizeCode)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="ot">emphasizeCodeTransform ::</span> <span class="dt">Pandoc</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Pandoc</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">emphasizeCodeTransform <span class="fu">=</span> walkM (emphasizeCode (<span class="dt">Just</span> (<span class="dt">Format</span> <span class="st">&quot;html5&quot;</span>)))</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="ot">emphasizeCodePandocCompiler ::</span> <span class="dt">Compiler</span> (<span class="dt">Item</span> <span class="dt">String</span>)</a>
+<a class="sourceLine" id="cb14-9" data-line-number="9">emphasizeCodePandocCompiler <span class="fu">=</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10">  pandocCompilerWithTransformM</a>
+<a class="sourceLine" id="cb14-11" data-line-number="11">    defaultHakyllReaderOptions</a>
+<a class="sourceLine" id="cb14-12" data-line-number="12">    defaultHakyllWriterOptions {writerHighlightStyle <span class="fu">=</span> <span class="dt">Nothing</span>}</a>
+<a class="sourceLine" id="cb14-13" data-line-number="13">    (unsafeCompiler <span class="fu">.</span> emphasizeCodeTransform)</a></code></pre></div>
+<p>You can now use <code>emphasizeCodePandocCompiler</code> instead of the default <code>pandocCompiler</code> in your Hakyll rules:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" data-line-number="1">match <span class="st">&quot;*.md&quot;</span> <span class="fu">$</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">  route <span class="fu">$</span> setExtension <span class="st">&quot;html&quot;</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  compile <span class="fu">$</span> emphasizeCodePandocCompiler</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">    <span class="fu">&gt;&gt;=</span> loadAndApplyTemplate <span class="st">&quot;templates/default.html&quot;</span> defaultContext</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">    <span class="fu">&gt;&gt;=</span> relativizeUrls</a></code></pre></div>
 <h2 id="changelog">Changelog</h2>
 <ul>
 <li><strong>0.2.4</strong>

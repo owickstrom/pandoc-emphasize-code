@@ -230,6 +230,20 @@ stack setup
 stack install
 ```
 
+To build the example in `README.src.md`, make sure you have on your
+`PATH`:
+
+  - `pandoc` (`stack build pandoc`)
+  - `pdflatex` (can be obtained from a [Tex
+    distribution](https://ctan.org/starter), on macOS `brew cask install
+    mactex` then add `/Library/TeX/texbin` to your `PATH`)
+
+Then run:
+
+``` sh
+make
+```
+
 ## Run
 
 If you have installed from sources, and you have `~/.local/bin` on your
@@ -237,6 +251,43 @@ If you have installed from sources, and you have `~/.local/bin` on your
 
 ``` sh
 pandoc --filter pandoc-emphasize-code input.md output.html
+```
+
+## Usage with Hakyll
+
+If you are using the [Hakyll](https://jaspervdj.be/hakyll/) static site
+generator, you can use the filter by importing it as a library and using
+the snippet below.
+
+Add `pandoc`, `pandoc-types`, and `pandoc-emphasize-code` to your
+project dependencies, then define a custom Hakyll compiler using a
+Pandoc transform:
+
+``` haskell
+import Text.Pandoc (Format (..), Pandoc)
+import Text.Pandoc.Walk (walkM)
+import Text.Pandoc.Filter.EmphasizeCode (emphasizeCode)
+
+emphasizeCodeTransform :: Pandoc -> IO Pandoc
+emphasizeCodeTransform = walkM (emphasizeCode (Just (Format "html5")))
+
+emphasizeCodePandocCompiler :: Compiler (Item String)
+emphasizeCodePandocCompiler =
+  pandocCompilerWithTransformM
+    defaultHakyllReaderOptions
+    defaultHakyllWriterOptions {writerHighlightStyle = Nothing}
+    (unsafeCompiler . emphasizeCodeTransform)
+```
+
+You can now use `emphasizeCodePandocCompiler` instead of the default
+`pandocCompiler` in your Hakyll rules:
+
+``` haskell
+match "*.md" $ do
+  route $ setExtension "html"
+  compile $ emphasizeCodePandocCompiler
+    >>= loadAndApplyTemplate "templates/default.html" defaultContext
+    >>= relativizeUrls
 ```
 
 ## Changelog
