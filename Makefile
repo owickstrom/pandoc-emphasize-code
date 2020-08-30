@@ -1,7 +1,7 @@
 all: README.md docs/index.html docs/pandoc-emphasize-code.pdf
 
 README.md: README.src.md docs/template.md Makefile
-	stack exec pandoc -- \
+	pandoc \
 		-s \
 		--toc \
 		--template docs/template.md \
@@ -12,7 +12,7 @@ README.md: README.src.md docs/template.md Makefile
 
 docs/pandoc-emphasize-code.pdf: README.src.md docs/header.tex Makefile
 	mkdir -p docs
-	stack exec pandoc -- \
+	pandoc \
 		-t latex \
 		-H docs/header.tex \
 		--toc \
@@ -22,7 +22,7 @@ docs/pandoc-emphasize-code.pdf: README.src.md docs/header.tex Makefile
 
 docs/index.html: README.src.md Makefile docs/footer.html
 	mkdir -p docs
-	stack exec pandoc -- \
+	pandoc \
 		-s \
 		-t html5 \
 		--toc \

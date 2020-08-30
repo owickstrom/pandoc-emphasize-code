@@ -3,6 +3,18 @@
 
 *A Pandoc filter for emphasizing code in fenced blocks.*
 
+  - [Usage](#usage)
+      - [Syntax](#syntax)
+      - [Rendering to HTML](#rendering-to-html)
+      - [Rendering with LaTeX](#rendering-with-latex)
+      - [Regular Highlighting](#regular-highlighting)
+  - [Install](#install)
+      - [From Hackage](#from-hackage)
+  - [Build](#build)
+  - [Run](#run)
+  - [Changelog](#changelog)
+  - [License](#license)
+
 ## Usage
 
 Often when working with code examples in documentation, printed or web
@@ -241,6 +253,8 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 
 ## Changelog
 
+  - **0.3.0**
+      - Bump pandoc-types to \>= 1.20
   - **0.2.4**
       - Allow full lines to specified, without any column information
       - Escape special LaTeX characters in emphasized code chunks

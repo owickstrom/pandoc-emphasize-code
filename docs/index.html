@@ -5,74 +5,75 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>pandoc-emphasize-code</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i|Fira+Mono:400|Oswald:400,600" />
   <link rel="stylesheet" href="docs.css" />
@@ -82,19 +83,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <![endif]-->
 </head>
 <body>
-<header>
+<header id="title-block-header">
 <h1 class="title">pandoc-emphasize-code</h1>
 <p class="subtitle">A Pandoc filter for emphasizing code in fenced blocks.</p>
 </header>
-<nav id="TOC">
+<nav id="TOC" role="doc-toc">
 <ul>
-<li><a href="#usage">Usage</a><ul>
+<li><a href="#usage">Usage</a>
+<ul>
 <li><a href="#syntax">Syntax</a></li>
 <li><a href="#rendering-to-html">Rendering to HTML</a></li>
 <li><a href="#rendering-with-latex">Rendering with LaTeX</a></li>
 <li><a href="#regular-highlighting">Regular Highlighting</a></li>
 </ul></li>
-<li><a href="#install">Install</a><ul>
+<li><a href="#install">Install</a>
+<ul>
 <li><a href="#from-hackage">From Hackage</a></li>
 </ul></li>
 <li><a href="#build">Build</a></li>
@@ -139,43 +142,43 @@ ranges          = range, { (&quot;,&quot;, range) };
 <p>There must be at least one range in the comma-separated list. A range can span multiple lines. For ranges composed of line numbers, the start and end columns are assumed to be the first and last column on that line.</p>
 <h3 id="rendering-to-html">Rendering to HTML</h3>
 <p>The code block above would render HTML output like the following (lines broken for readability):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;haskell&quot;</span><span class="kw">&gt;&lt;code&gt;</span>myFunc = do</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">&lt;mark</span><span class="ot"> class=</span><span class="st">&quot;block&quot;</span><span class="kw">&gt;</span>  newStuffHere<span class="kw">&lt;/mark&gt;</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="kw">&lt;mark</span><span class="ot"> class=</span><span class="st">&quot;inline&quot;</span><span class="kw">&gt;</span>andThisToo<span class="kw">&lt;/mark&gt;</span> notThis</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  notSoRelevant<span class="kw">&lt;/code&gt;&lt;/pre&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">&lt;pre</span><span class="ot"> class=</span><span class="st">&quot;haskell&quot;</span><span class="kw">&gt;&lt;code&gt;</span>myFunc = do</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">&lt;mark</span><span class="ot"> class=</span><span class="st">&quot;block&quot;</span><span class="kw">&gt;</span>  newStuffHere<span class="kw">&lt;/mark&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  <span class="kw">&lt;mark</span><span class="ot"> class=</span><span class="st">&quot;inline&quot;</span><span class="kw">&gt;</span>andThisToo<span class="kw">&lt;/mark&gt;</span> notThis</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  notSoRelevant<span class="kw">&lt;/code&gt;&lt;/pre&gt;</span></span></code></pre></div>
 <p>When rendering to <code>html5</code> or <code>revealjs</code>, the emphasized ranges are wrapped in <code>&lt;mark&gt;</code> tags. The default browser styling is black text on yellow background, but can be customized with CSS:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode css"><code class="sourceCode css"><a class="sourceLine" id="cb3-1" data-line-number="1">code mark {</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">background-color</span>: <span class="dv">black</span>;</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="kw">color</span>: <span class="dv">white</span>;</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">}</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>code mark {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="kw">background-color</span>: <span class="cn">black</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>  <span class="kw">color</span>: <span class="cn">white</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>}</span></code></pre></div>
 <p>The <code>html</code> and <code>markdown_github</code> output formats use <code>&lt;em&gt;</code> tags instead of <code>&lt;mark&gt;</code> tags. By default, <code>&lt;em&gt;</code> tags are rendered in italic type, but can be customized with CSS:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode css"><code class="sourceCode css"><a class="sourceLine" id="cb4-1" data-line-number="1">code em {</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="kw">font-weight</span>: <span class="dv">bold</span>;</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="kw">font-style</span>: <span class="dv">normal</span>;</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">}</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>code em {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  <span class="kw">font-weight</span>: <span class="dv">bold</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>  <span class="kw">font-style</span>: <span class="dv">normal</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>}</span></code></pre></div>
 <p>If you want to achieve the same “entire line” highlighting effect seen in the above examples, you’ll also want to add these styles:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode css"><code class="sourceCode css"><a class="sourceLine" id="cb5-1" data-line-number="1">pre &gt; code {</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="kw">position</span>: <span class="dv">relative</span>;</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="kw">display</span>: <span class="dv">inline-block</span>;</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="kw">min-width</span>: <span class="dv">100%</span>;</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="kw">z-index</span>: <span class="dv">1</span>;</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">mark<span class="fu">.block</span><span class="in">::after</span> {</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">  <span class="kw">content</span>: <span class="st">&quot;&quot;</span>;</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10">  <span class="kw">position</span>: <span class="dv">absolute</span>;</a>
-<a class="sourceLine" id="cb5-11" data-line-number="11">  <span class="kw">background-color</span>: <span class="dv">yellow</span>;</a>
-<a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="kw">z-index</span>: <span class="dv">-1</span>;</a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="co">/**</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">   * Adjust these sizes to work with your code blocks.</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">   * For example, you can set left &amp; right to be negative</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">   * if you have padding on your code blocks.</span></a>
-<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">   */</span></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19">  <span class="kw">left</span>: <span class="dv">0</span>;</a>
-<a class="sourceLine" id="cb5-20" data-line-number="20">  <span class="kw">right</span>: <span class="dv">0</span>;</a>
-<a class="sourceLine" id="cb5-21" data-line-number="21">  <span class="kw">height</span>: <span class="dv">1.5rem</span>;</a>
-<a class="sourceLine" id="cb5-22" data-line-number="22">}</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>pre <span class="op">&gt;</span> code {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  <span class="kw">position</span>: <span class="dv">relative</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="kw">display</span>: <span class="dv">inline-block</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>  <span class="kw">min-width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>  <span class="kw">z-index</span>: <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>}</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>mark<span class="fu">.block</span><span class="in">::after</span> {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>  <span class="kw">content</span>: <span class="st">&quot;&quot;</span><span class="op">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>  <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>  <span class="kw">background-color</span>: <span class="cn">yellow</span><span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>  <span class="kw">z-index</span>: <span class="dv">-1</span><span class="op">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>  <span class="co">/**</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a><span class="co">   * Adjust these sizes to work with your code blocks.</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a><span class="co">   * For example, you can set left &amp; right to be negative</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a><span class="co">   * if you have padding on your code blocks.</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a><span class="co">   */</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a>  <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a>  <span class="kw">right</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a>  <span class="kw">height</span>: <span class="dv">1.5</span><span class="dt">rem</span><span class="op">;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a>}</span></code></pre></div>
 <p><strong>NOTE:</strong> There is no additional syntax highlighting when emphasizing code and rendering to HTML, as there is no way to use Pandoc’s highlighter and embed custom HTML tags. You can usually recover language-based syntax highlighting with a JavaScript syntax highlighter running in the browser on page load (for example: <a href="https://highlightjs.org/">highlight.js</a>).</p>
 <h3 id="rendering-with-latex">Rendering with LaTeX</h3>
 <p>When rendering using LaTeX, two things are required:</p>
@@ -184,20 +187,20 @@ ranges          = range, { (&quot;,&quot;, range) };
 <li>You need to define a <code>CodeEmphasis</code> and <code>CodeEmphasisLine</code> command, styling the emphasized code in <code>lstlisting</code>s.</li>
 </ul>
 <p>If you’re not using a custom LaTeX template, you can use the YAML front matter in a Markdown source file to add the requirements:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="fu">header-includes:</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw">-</span> \usepackage<span class="kw">{</span>listings<span class="kw">}</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw">-</span> \lstset<span class="kw">{</span>basicstyle=\ttfamily<span class="kw">}</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="kw">-</span> \newcommand<span class="kw">{</span>\CodeEmphasis<span class="kw">}[</span>1<span class="kw">]{</span>\textcolor{red<span class="kw">}{</span>\textit{<span class="co">#1</span><span class="re">}}}</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">  - \newcommand{\CodeEmphasisLine<span class="kw">}[</span>1<span class="kw">]{</span>\textcolor{red<span class="kw">}{</span>\textit{<span class="co">#1</span><span class="re">}}}</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="fu">header-includes</span><span class="kw">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> \usepackage{listings}</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> \lstset{basicstyle=\ttfamily}</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> \newcommand{\CodeEmphasis}[1]{\textcolor{red}{\textit{</span><span class="co">#1</span><span class="re">}}}</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a><span class="at">  </span><span class="kw">-</span><span class="at"> \newcommand{\CodeEmphasisLine}[1]{\textcolor{red}{\textit{</span><span class="co">#1</span><span class="re">}}}</span></span></code></pre></div>
 <p><strong>NOTE:</strong> When rendering as Beamer slides, any frame including an emphasized block must be marked as <code>fragile</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode markdown"><code class="sourceCode markdown"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">## My Slide {.fragile}</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="bn">```{.haskell emphasize=2:3-2:14,3:3-3:12}</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="bn">myFunc = do</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="bn">  newStuffHere</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="bn">  andThisToo notThis</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="bn">  notSoRelevant</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="bn">```</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">## My Slide {.fragile}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="in">```{.haskell emphasize=2:3-2:14,3:3-3:12}</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="in">myFunc = do</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="in">  newStuffHere</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="in">  andThisToo notThis</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="in">  notSoRelevant</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a><span class="in">```</span></span></code></pre></div>
 <h3 id="regular-highlighting">Regular Highlighting</h3>
 <p>You can still use regular Pandoc highlighting (the <em>skylighting</em> library):</p>
 <pre><code>``` {.haskell}
@@ -208,17 +211,17 @@ myFunc = do
   notSoRelevant
 ```</code></pre>
 <p>It gives you all the nice colors:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ot">myFunc ::</span> <span class="dt">The</span> <span class="dt">Type</span> <span class="ot">-&gt;</span> <span class="dt">Signature</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">myFunc <span class="fu">=</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">  newStuffHere</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">  andThisToo notThis</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">  notSoRelevant</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="ot">myFunc ::</span> <span class="dt">The</span> <span class="dt">Type</span> <span class="ot">-&gt;</span> <span class="dt">Signature</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>myFunc <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  newStuffHere</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>  andThisToo notThis</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>  notSoRelevant</span></code></pre></div>
 <p>The drawback is that you have two different highlighting systems now, one for emphasized code, one for regular code blocks.</p>
 <h2 id="install">Install</h2>
 <p>Executables for Linux and macOS are available in the <a href="https://github.com/owickstrom/pandoc-emphasize-code/releases">Releases page</a>.</p>
 <h3 id="from-hackage">From Hackage</h3>
 <p>If you’d rather install using <code>cabal</code> or <code>stack</code>, you can use the following command:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="ex">cabal</span> install pandoc-emphasize-code</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="ex">cabal</span> install pandoc-emphasize-code</span></code></pre></div>
 <p>The package is <a href="https://hackage.haskell.org/package/pandoc-emphasize-code">available at Hackage</a>.</p>
 <h2 id="build">Build</h2>
 <p>Requirements:</p>
@@ -226,15 +229,19 @@ myFunc = do
 <li><a href="https://www.haskell.org/cabal/">Cabal</a> or <a href="https://docs.haskellstack.org/en/stable/README/">Stack</a>, either works.</li>
 </ul>
 <p>To install from sources, run:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="fu">git</span> clone git@github.com:owickstrom/pandoc-emphasize-code.git</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="bu">cd</span> pandoc-emphasize-code</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="ex">stack</span> setup</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="ex">stack</span> install</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="fu">git</span> clone git@github.com:owickstrom/pandoc-emphasize-code.git</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="bu">cd</span> pandoc-emphasize-code</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="ex">stack</span> setup</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="ex">stack</span> install</span></code></pre></div>
 <h2 id="run">Run</h2>
 <p>If you have installed from sources, and you have <code>~/.local/bin</code> on your <code>PATH</code>, you can use the filter with Pandoc like so:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ex">pandoc</span> --filter pandoc-emphasize-code input.md output.html</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="ex">pandoc</span> --filter pandoc-emphasize-code input.md output.html</span></code></pre></div>
 <h2 id="changelog">Changelog</h2>
 <ul>
+<li><strong>0.3.0</strong>
+<ul>
+<li>Bump pandoc-types to &gt;= 1.20</li>
+</ul></li>
 <li><strong>0.2.4</strong>
 <ul>
 <li>Allow full lines to specified, without any column information</li>

@@ -237,6 +237,8 @@ pandoc --filter pandoc-emphasize-code input.md output.html
 
 ## Changelog
 
+- **0.3.0**
+    - Bump pandoc-types to >= 1.20
 - **0.2.4**
     - Allow full lines to specified, without any column information
     - Escape special LaTeX characters in emphasized code chunks
