@@ -41,12 +41,12 @@ instance Renderable Html where
   renderEmphasized (Html tag) (_, classes, _) lines' =
     Pandoc.RawBlock
       (Pandoc.Format "html")
-      (TextLazy.unpack (Html.renderText emphasized))
+      (TextLazy.toStrict (Html.renderText emphasized))
     where
       classAttrs =
         if null classes
           then []
-          else [Html.class_ (Text.pack (unwords classes))]
+          else [Html.class_ (Text.unwords classes)]
       emphasized =
         Html.pre_ classAttrs $
         Html.code_ $

@@ -7,6 +7,7 @@ import           Test.Tasty.Hspec
 
 import qualified Text.Pandoc.Filter.EmphasizeCode as Filter
 import           Text.Pandoc.JSON
+import Data.Text (Text)
 
 singleRangeHtmlMark :: Block
 singleRangeHtmlMark =
@@ -30,7 +31,7 @@ singleRangeHtmlEm =
        , "hei verden</code></pre>"
        ])
 
-emphasizeCode :: Format -> String -> IO Block
+emphasizeCode :: Format -> Text -> IO Block
 emphasizeCode format ranges =
   Filter.emphasizeCode
     (Just format)

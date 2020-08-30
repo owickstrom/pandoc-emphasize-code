@@ -17,6 +17,7 @@ import           Text.Pandoc.Filter.EmphasizeCode.Parser
 import           Text.Pandoc.Filter.EmphasizeCode.Pretty
 import           Text.Pandoc.Filter.EmphasizeCode.Range
 import           Text.Pandoc.Filter.EmphasizeCode.Renderable
+import Data.Text (Text)
 
 printAndFail :: NonEmpty ParseError -> IO a
 printAndFail (err :| []) = fail . Text.unpack . printParseError $ err
@@ -31,15 +32,15 @@ toRenderer f
   | f == "beamer" = Just (renderEmphasized Latex)
   | otherwise = Nothing
 
-lookupRanges :: HM.HashMap String String -> Maybe Text.Text
-lookupRanges attrs = Text.pack <$> HM.lookup "emphasize" attrs
+lookupRanges :: HM.HashMap Text Text -> Maybe Text.Text
+lookupRanges = HM.lookup "emphasize"
 
 -- | A Pandoc filter that emphasizes code blocks.
 emphasizeCode :: Maybe Pandoc.Format -> Pandoc.Block -> IO Pandoc.Block
 emphasizeCode (Just (toRenderer -> Just render)) cb@(Pandoc.CodeBlock (id', classes, attrs) contents) =
   case lookupRanges attrs' >>= (runParser . parseRanges) of
     Just (Right ranges) ->
-      let lines' = emphasizeRanges (splitRanges ranges) (Text.pack contents)
+      let lines' = emphasizeRanges (splitRanges ranges) contents
           block =
             render
               (id', classes, HM.toList (HM.delete "emphasize" attrs'))
