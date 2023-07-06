@@ -4,6 +4,7 @@
 module Text.Pandoc.Filter.EmphasizeCode.ChunkingTest where
 
 import           Test.Tasty.Hspec
+import           Test.Hspec (it, shouldBe)
 
 import           Text.Pandoc.Filter.EmphasizeCode.Chunking
 import           Text.Pandoc.Filter.EmphasizeCode.Range

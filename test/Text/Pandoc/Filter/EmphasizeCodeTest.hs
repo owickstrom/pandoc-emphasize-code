@@ -4,6 +4,7 @@
 module Text.Pandoc.Filter.EmphasizeCodeTest where
 
 import           Test.Tasty.Hspec
+import           Test.Hspec (it, shouldReturn)
 
 import qualified Text.Pandoc.Filter.EmphasizeCode as Filter
 import           Text.Pandoc.JSON
