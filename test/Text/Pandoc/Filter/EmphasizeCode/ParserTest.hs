@@ -8,6 +8,7 @@ import           Data.List.NonEmpty
 import qualified Data.Text                                       as T
 
 import           Test.Tasty.Hspec
+import           Test.Hspec (it, shouldBe, shouldSatisfy)
 import           Text.Pandoc.Filter.EmphasizeCode.Parser
 import           Text.Pandoc.Filter.EmphasizeCode.Position
 import           Text.Pandoc.Filter.EmphasizeCode.Range

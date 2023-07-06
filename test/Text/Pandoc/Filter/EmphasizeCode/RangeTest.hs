@@ -6,6 +6,7 @@ import qualified Data.HashMap.Strict                             as HashMap
 import           Data.Maybe                                      (mapMaybe)
 import           Data.Tuple                                      (swap)
 import           Test.Tasty.Hspec
+import           Test.Hspec (it, shouldThrow, anyException, Expectation, shouldBe)
 
 import           Text.Pandoc.Filter.EmphasizeCode.Position
 import           Text.Pandoc.Filter.EmphasizeCode.Range
